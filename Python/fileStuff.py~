@@ -1,0 +1,10 @@
+
+with open("testFile.txt") as f:
+    contents = []
+    for line in f:
+        contents.append(line.rstrip())
+
+    for line in contents:
+        print line
+
+
