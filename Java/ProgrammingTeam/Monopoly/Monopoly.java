@@ -16,7 +16,7 @@ public class Monopoly
 	public static int boardPos = 0;
 	
 	public static final int NUM_SPACES = 40;
-	public static final int NUM_MOVES = 100000000;
+	public static final int NUM_MOVES = 10000000;
 	
 	
 	public static void main(String[] args)
@@ -70,13 +70,13 @@ public class Monopoly
 			}
 		}
 		
-		pastMoves.poll();
+		pastMoves.clear();
 		return true;
 	}
 	
 	public static Space processSpace(Space s)
 	{
-		if (s.name.equals("CC") || s.name.equals("CH"))
+		if (s.name.contains("CC") || s.name.contains("CH"))
 			return processCardSpace(s);
 		
 		if (s.name.equals("G2J")) {
@@ -93,37 +93,56 @@ public class Monopoly
 	public static Space processCardSpace(Space s)
 	{
 		Space newSpace;
-		if (s.name.equals("CC")) {
+		boolean moveCard = true;
+		if (s.name.contains("CC")) {
 			// Get first chance card, add to end of list
-			String currCard = chance.removeFirst();
-			chance.add(currCard);
-			
-			newSpace = spaceMap.get(currCard.split(" ")[2]);	
-		}
-		else { // Community chest card
 			String currCard = communityChest.removeFirst();
 			communityChest.add(currCard);
 			
-			String[] instructions = currCard.split(" ");
-			if (instructions.length == 3) {
-				newSpace = spaceMap.get(instructions[2]); 
+			if (currCard.equals("")) {
+				newSpace = s;
+				moveCard = false;
 			}
-			else if (instructions[2].equals("next")) {
-				newSpace = processNextCard(instructions[3]);
+			else
+				newSpace = spaceMap.get(currCard.split(" ")[2]);	
+		}
+		else { // Chance card
+			String currCard = chance.removeFirst();
+			chance.add(currCard);
+			
+			if (currCard.equals("")) {
+				newSpace = s;
+				moveCard = false;
 			}
-			else { // Go back 3 squares
-				newSpace = spaces[(boardPos - 3) % NUM_SPACES];
+			
+			else {
+				String[] instructions = currCard.split(" ");
+				if (instructions.length == 3) {
+					newSpace = spaceMap.get(instructions[2]); 
+				}
+				else if (instructions[2].equals("next")) {
+					newSpace = processNextCard(instructions[3]);
+				}
+				else { // Go back 3 squares
+					newSpace = spaces[(boardPos - 3) % NUM_SPACES];
+				}
 			}
 		}
 		
 		boardPos = newSpace.position;
+		if (moveCard) {
+			return processSpace(newSpace);
+		}
+		
 		return newSpace;
+		
+		
 	}
 	
 	public static Space processNextCard(String spaceType)
 	{
 		// Find next R or U space
-		while (!spaces[boardPos].name.equals("R")) {
+		while (!spaces[boardPos].name.contains(spaceType)) {
 			boardPos = (boardPos + 1) % NUM_SPACES;
 		}
 		
@@ -157,6 +176,8 @@ public class Monopoly
 		LinkedList<String> cards = new LinkedList<String>();
 		cards.add("Advance to GO");
 		cards.add("Go to JAIL");
+		for (int i = 0; i < 14; i++)
+			cards.add("");
 		return cards;
 	}
 	
@@ -166,13 +187,15 @@ public class Monopoly
 		for (String cardName : getChanceCardNames()) {
 			cards.add(cardName);
 		}
+		cards.add("");
+		cards.add("");
 		return cards;
 	}
 	
 	public static String[] getSpaceKeys() 
 	{
 		return new String[] {
-				"GO", "A1", "CC1", "A2", "T1", "R1", "B1", "CH2", "B2", "B3",
+				"GO", "A1", "CC1", "A2", "T1", "R1", "B1", "CH1", "B2", "B3",
 				"JAIL", "C1", "U1", "C2", "C3", "R2", "D1", "CC2", "D2", "D3",
 				"FP", "E1", "CH2", "E2", "E3", "R3", "F1", "F2", "U2", "F3",
 				"G2J", "G1", "G2", "CC3", "G3", "R4", "CH3", "H1", "T2", "H2"};
@@ -199,8 +222,8 @@ public class Monopoly
 
 		@Override
 		public int compareTo(Space other) {
-			if (count > other.count)  return 1;
-			if (count < other.count)  return -1;
+			if (count > other.count)  return -1;
+			if (count < other.count)  return 1;
 			return 0;
 		}
 	}
