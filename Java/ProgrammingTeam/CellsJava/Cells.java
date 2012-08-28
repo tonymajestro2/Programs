@@ -33,12 +33,12 @@ public class Cells
 			double y = (r.nextDouble() * c.radius * 2) - c.radius + c.y;
 			
 			// Check if the point's coordinates are in the town circle
-			if (!isInCircle(c, x, y))
+			if (!c.containsPoint(x, y))
 				continue;
 			
 			// Find a tower whose coverage includes the point
 			for (Circle tower : towers) {
-				if (isInCircle(tower, x, y)) {
+				if (tower.containsPoint(x, y)) {
 					count++;
 					break;
 				}
@@ -49,13 +49,6 @@ public class Cells
 		return (count * 1.0) / total;
 	}
 	
-	
-	public static boolean isInCircle(Circle c, double x, double y)
-	{
-		return Math.sqrt(Math.pow(c.x - x, 2) + Math.pow(c.y - y, 2)) <= c.radius;
-	}
-	
-	
 	public static class Circle
 	{
 		public double x;
@@ -65,5 +58,9 @@ public class Cells
 		public Circle(double x, double y, double radius) {
 			this.x = x; this.y = y; this.radius = radius;
 		}
+
+        public boolean containsPoint(double x, double y) {
+		    return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2)) <= radius;
+        }
 	}
 }
