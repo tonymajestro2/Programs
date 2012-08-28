@@ -128,15 +128,14 @@ public class Monopoly
 				}
 			}
 		}
-		
+	
+        // Process the new space if it is a move card    
 		boardPos = newSpace.position;
 		if (moveCard) {
 			return processSpace(newSpace);
 		}
-		
+	
 		return newSpace;
-		
-		
 	}
 	
 	public static Space processNextCard(String spaceType)
