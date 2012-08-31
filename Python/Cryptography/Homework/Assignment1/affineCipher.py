@@ -78,14 +78,17 @@ if (__name__ == '__main__'):
             
             b = getB(digramNumbers[0], a, wordNumbers[0], 26)
             if ((a,b) not in s):
-                decryptedTexts.append("{3}, ({0},{1}): {2}".format(a, b, decrypt(word, a, b), j))
+                decryptedTexts.append("{3}, ({0},{1}): {2}".format(a, b, decrypt(word, a, b), digram + " " + wordDigram))
                 s.add((a,b))
                 
         
                 
     for plaintext in decryptedTexts:
+        count = 0
         for commonWord in frequency.commonWords:
             if (plaintext.find(commonWord) >= 0):
-                print plaintext
-                break
+                count += 1 
+                if (count > 2):
+                    print plaintext
+                    break
                 
