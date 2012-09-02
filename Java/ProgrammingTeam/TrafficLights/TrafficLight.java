@@ -3,7 +3,7 @@ import java.util.PriorityQueue;
 import java.util.Scanner;
 
 
-public class TrafficLight 
+class TrafficLight
 {
 	public static void main(String[] args)
 	{
@@ -60,11 +60,11 @@ public class TrafficLight
 	public static String formatTime(int seconds)
 	{
 		int minutes = seconds / 60;
-		seconds %= seconds % 60;
+		seconds %= 60;
 		int hours = minutes / 60;
 		minutes %= 60;
 		
-		return String.format("20d:20d:20", hours, minutes, seconds);
+		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
 	}
 	
 	
