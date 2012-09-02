@@ -32,12 +32,11 @@ public class TrafficLight
 		// Add initial states to queue
 		PriorityQueue<Light> queue = new PriorityQueue<Light>(lights);
 		boolean changedToYellow = false;
-		Light last = null;
 		
 		// Process queue
 		while (true) {
 			Light currLight = queue.poll();
-			System.out.printf("%d, %d, %d\n", currLight.currTime, currLight.cycleTime, currLight.state);
+			currLight.computeNextTime();
 			
 			if (currLight.currTime > 18000) {  // 5 hours
 				System.out.println("Signals fail to synchronise in 5 hours");
@@ -45,26 +44,36 @@ public class TrafficLight
 			}
 			
 			if (changedToYellow && allGreen(queue, currLight)) {
-				System.out.printf("%d\n", last.currTime);
+				System.out.printf("%s\n", formatTime(currLight.currTime));
 				return;
 			}
 			
-			currLight.computeNextTime(true);
-			changedToYellow = true;
+			if (currLight.currState == YELLOW)
+				changedToYellow = true;
 			
 			// Add updated light to end of queue
 			queue.add(currLight);
-			last = currLight;
 		}
 	}
 	
 	
+	public static String formatTime(int seconds)
+	{
+		int minutes = seconds / 60;
+		seconds %= seconds % 60;
+		int hours = minutes / 60;
+		minutes %= 60;
+		
+		return String.format("20d:20d:20", hours, minutes, seconds);
+	}
+	
+	
 	public static boolean allGreen(PriorityQueue<Light> lights, Light currLight) {
-		if (currLight.state != GREEN)
+		if (currLight.currState != GREEN)
 			return false;
 		
 		for (Light l : lights) {
-			if (l.state != GREEN)
+			if (l.currState != GREEN)
 				return false;
 		}
 		return true;
@@ -74,37 +83,45 @@ public class TrafficLight
 	private static class Light implements Comparable<Light>
 	{
 		public int currTime;
+		public int nextTime;
+		public int currState;
+		public int nextState;
+		
 		public int cycleTime;
-		public int state;
 		
 		public Light(int cycleTime) {
-			this.currTime = 0;
+			this.currTime = this.nextTime = 0;
 			this.cycleTime = cycleTime;
-			this.state = GREEN; 
+			this.currState = GREEN;
+			this.nextState = GREEN;
 		}
 		
-		public int computeNextTime(boolean update) {
-			int nextTime = -1;
-			switch (state) {
+		public void computeNextTime() {
+			currTime = nextTime;
+			
+			switch (nextState) {
 				case GREEN: nextTime = currTime + cycleTime - 5; break;
 				case YELLOW: nextTime = currTime + 5;  break;
 				case RED: nextTime = currTime + cycleTime;  break;
 			}
-			
-			if (update) {
-				state = (state + 1) % 3;
-				currTime = nextTime;
-			}
-			return nextTime;
+			currState = nextState;
+			nextState = (nextState+ 1) % 3;
 		}
 
 		@Override
 		public int compareTo(Light other) {
-			if (currTime == other.currTime) {
-				return computeNextTime(false) - other.computeNextTime(false);
+			if (nextTime == other.nextTime) {
+				return cycleTime - other.cycleTime;
 			}
-			return computeNextTime(false) - other.currTime;
-			
+			return nextTime - other.nextTime;
+		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			Light other = (Light) o;
+			return currTime == other.currTime && nextTime == other.nextTime &&
+					currState == other.currState && nextState == other.nextState;
 		}
 	}
 	

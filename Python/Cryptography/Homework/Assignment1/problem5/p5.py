@@ -13,7 +13,7 @@ def solve(word, wordMonograms, popMonograms, i, j):
         return
     
     newWord = word.replace(wordMonograms[i], popMonograms[j].upper())
-    solve(newWord, wordMonograms[1:], popMonograms[1:])
+    solve(newWord, wordMonograms, popMonograms[1:])
     solve(newWord, wordMonograms, popMonograms[1:])
     solve(newWord, wordMonograms[1:], popMonograms)
     
