@@ -1,0 +1,21 @@
+
+formula for # keys in affine cipher - values of a * value for b
+values for a are all values from [0,a) that are coprime
+can be calculated using the euler phi function:
+
+m = 30;
+30 = 2 * 3 * 5
+phi(30) = (2-1) * (3-1) * (5-1) = 1 * 2 * 4 = 8
+so total keys = #a * #b = 8 * 30 = 240
+
+m = 100:
+100 = 2 * 2 * 5 * 5
+phi(100) = 1 * 1 * 4 * 4 = 16
+so keys = 16 * 100 = 1600
+
+m = 1225
+1225 = 5 * 5 * 7 * 7
+phi(1225) = 4 * 4 * 6 * 6 = 576
+so keys = 576 * 1225 = 705,600
+
+
