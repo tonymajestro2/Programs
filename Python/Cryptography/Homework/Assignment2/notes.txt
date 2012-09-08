@@ -1,0 +1,67 @@
+1. The following was encrypted by the Vigenere method. Decrypt it. Carefully 
+document your work – in general, more details are better than fewer details.
+
+XKJUROWMLLPXWZNPIMBVBQJCNOWXPCCHHVVFVSLLFVXHAZITYXOHULX
+QOJAXELXZXMYJAQFSTSRULHHUCDSKBXKNJQIDALLPQSLLUHIAQFPBPC
+IDSVCIHWHWEWTHBTXRLJNRSNCIHUVFFUXVOUKJLJSWMAQFVJWJSDYLJ
+OGJXDBOXAJULTUCPZMPLIWMLUBZXVOODYBAFDSKXGQFADSHXNXEHSAR
+UOJAQFPFKNDHSAAFVULLUWTAQFRUPWJRSZXGPFUTJQIYNRXNYNTWMHC
+
+Since we're given the cipher, we know the system is polyalphabetic.  This means
+that we don't have to calculate the Index of Coincidence for the ciphertext to
+determine that it is in fact a polyalphabetic system.
+
+The next step is to try to determine the key-length of the cipher.  The method
+I chose was the kasiski method.  The following algorithm attempts to calculate the 
+key length for a given ciphertext.
+
+(kasiski method code)
+
+We've determined that the key length is 5.  Since 5 is prime, it must be the
+actual key length and not a multiple of the key length.
+
+Now that we have the key length, we can separate our ciphertext into lengths
+of 5.  When we stack each row of ciphertexts, we can perform frequency analysis 
+on each column of the stack.  This is because each column was encrypted using
+the same letter.  The following program shows the letter frequencies for
+each column:
+
+(show columns)
+(show column frequencies)
+
+As a sanity check, we can check the Index of Coincidence for each column. Each
+column should have an IC of around 0.066.
+
+
+
+
+
+2. Suppose you have a language with only the three letters a, b, c, and they occur 
+with frequencies 0.7, 0.2 and 0.1, respectively. The following ciphertext was 
+encrypted by the Vigenere method (shifts are mod 3 instead of mod 26):
+
+ABCBABBBAC
+
+You are told that the key length is 1, 2, or 3. Show that the key length is 
+probably 2, and determine the most probable key. Again, document your work.
+
+To determine the key length, we can begin by calculating the Index of
+Coincidence of the language:
+
+(Show IC for language)
+
+Next, to determine the key length, we can construct stacks of rows of length
+m = 1,2,3 and determine the IC of each column.  The value of m that gives
+ICs closest to the IC for the language is likely the key length.
+
+(show work here)
+
+
+
+
+
+
+
+
+
+

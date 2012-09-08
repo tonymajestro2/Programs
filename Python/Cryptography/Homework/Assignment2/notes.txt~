@@ -1,0 +1,52 @@
+1. The following was encrypted by the Vigenere method. Decrypt it. Carefully 
+document your work – in general, more details are better than fewer details.
+
+XKJUROWMLLPXWZNPIMBVBQJCNOWXPCCHHVVFVSLLFVXHAZITYXOHULX
+QOJAXELXZXMYJAQFSTSRULHHUCDSKBXKNJQIDALLPQSLLUHIAQFPBPC
+IDSVCIHWHWEWTHBTXRLJNRSNCIHUVFFUXVOUKJLJSWMAQFVJWJSDYLJ
+OGJXDBOXAJULTUCPZMPLIWMLUBZXVOODYBAFDSKXGQFADSHXNXEHSAR
+UOJAQFPFKNDHSAAFVULLUWTAQFRUPWJRSZXGPFUTJQIYNRXNYNTWMHC
+
+Since we're given the cipher, we know the system is polyalphabetic.  This means
+that we don't have to calculate the Index of Coincidence for the ciphertext to
+determine that it is in fact a polyalphabetic system.
+
+The next step is to try to determine the key-length of the cipher.  The method
+I chose was the kasiski method.  The following algorithm attempts to calculate the 
+key length for a given ciphertext.
+
+(kasiski method code)
+
+We've determined that the key length is 5.  Since 5 is prime, it must be the
+actual key length and not a multiple of the key length.
+
+Now that we have the key length, we can separate our ciphertext into lengths
+of 5.  When we stack each row of ciphertexts, we can perform frequency analysis 
+on each column of the stack.  This is because each column was encrypted using
+the same letter.  The following program shows the letter frequencies for
+each column:
+
+(show columns)
+(show column frequencies)
+
+As a sanity check, we can check the Index of Coincidence for each column. Each
+column should have an IC of around 0.066.
+
+
+
+
+
+2. 
+
+
+
+
+
+
+
+
+
+
+
+
+
