@@ -1,0 +1,20 @@
+Problem 1
+jest
+ugli
+goon
+Problem 2: No layout is possible.
+Problem 3
+st#h
+li#a
+on#w
+walk
+###s
+Problem 4
+######
+#st#h#
+#li#a#
+#on#w#
+#walk#
+####s#
+######
+Problem 5: No layout is possible.

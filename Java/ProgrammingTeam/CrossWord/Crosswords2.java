@@ -7,10 +7,9 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 
-public class CrossWord
+public class Crosswords2
 {
 	private static int trial = 1;
-	private static boolean match = false;
 	private static char[][] goalPuzzle = null;
 	
 	public static void main(String[] args) throws IOException
@@ -42,7 +41,7 @@ public class CrossWord
 				puzzle[i] = in.nextLine().toCharArray();
 			}
 			
-			ArrayList<Placement> placements = getPlacements(puzzle, words, n);
+			HashSet<Placement> placements = getPlacements(puzzle, words, n);
 			
 			solve(words, new HashSet<String>(), placements, new HashSet<Placement>(), puzzle, m);
 			if (goalPuzzle != null) {
@@ -58,21 +57,18 @@ public class CrossWord
 	
 	
 	public static char[][] solve(HashMap<Integer, ArrayList<String>> words, HashSet<String> usedWords,
-			ArrayList<Placement> placements, HashSet<Placement> usedPlaces, char[][] puzzle, 
-			int totalWords)
+			HashSet<Placement> placements, HashSet<Placement> usedPlaces, char[][] puzzle, int totalWords)
 	{
 		if (usedWords.size() == totalWords && checkSolution(puzzle)) {
 			goalPuzzle = puzzle;
 			return puzzle;
 		}
-		printBoard(puzzle);
-		System.out.println();
-		match = false;
+		//printBoard(puzzle);
+		//System.out.println();
 		for (Placement p : placements) {
 			if (usedPlaces.contains(p))
 				continue;
 	
-			match = true;
 			boolean foundWord = false;
 			for (String word : words.get(p.length)) {
 				if (usedWords.contains(word))
@@ -81,18 +77,18 @@ public class CrossWord
 				if (p.canBePlaced(word, puzzle)) {
 					char[][] newPuzzle = clonePuzzle(puzzle);
 					p.place(word, newPuzzle);
+					HashSet<Placement> neighbors = new HashSet<Placement>(placements);
+					neighbors.addAll(p.neighbors);
 					usedPlaces.add(p);
 					usedWords.add(word);
 					foundWord = true;
 					
-					puzzle = solve(words, usedWords, p.neighbors, usedPlaces, newPuzzle, totalWords);
+					newPuzzle = solve(words, usedWords, neighbors, usedPlaces, newPuzzle, totalWords);
 					if (goalPuzzle != null)
 						return newPuzzle;
 					
-					if (match) {
-						usedPlaces.remove(p);
-						usedWords.remove(word);
-					}
+					usedPlaces.remove(p);
+					usedWords.remove(word);
 				}
 			}
 			if (!foundWord) {
@@ -141,10 +137,10 @@ public class CrossWord
 	}
 	
 	
-	public static ArrayList<Placement> getPlacements(char[][] puzzle, HashMap<Integer, ArrayList<String>> words, int rows) 
+	public static HashSet<Placement> getPlacements(char[][] puzzle, HashMap<Integer, ArrayList<String>> words, int rows) 
 	{
-		ArrayList<Placement> horizontalPlacements = new ArrayList<Placement>();
-		ArrayList<Placement> verticalPlacements = new ArrayList<Placement>();
+		HashSet<Placement> horizontalPlacements = new HashSet<Placement>();
+		HashSet<Placement> verticalPlacements = new HashSet<Placement>();
 		
 		int columns = puzzle[0].length;
 		for (int i = 0; i < rows; i++) {

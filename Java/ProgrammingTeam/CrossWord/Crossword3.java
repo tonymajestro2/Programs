@@ -1,5 +1,19 @@
-import java.io.File;
-import java.io.IOException;
+/**
+ * Tony Majestro (tmajest)
+ * 
+ * Program gathers all of the available 'placements' on the board.
+ * For each placement, it tries to find the word that fits at that
+ * place.  
+ * 
+ * Only words that could fit in the placement are attempted.
+ * 
+ * If no word of the correct size can fit in the placement, we backtrack.
+ * 
+ * Program passes all sets of input in under 3 seconds except for the large
+ * input set where it times out.
+ */
+
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,15 +21,14 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 
-public class CrossWord
+public class Crossword3
 {
 	private static int trial = 1;
-	private static boolean match = false;
 	private static char[][] goalPuzzle = null;
 	
-	public static void main(String[] args) throws IOException
+	public static void main(String[] args)
 	{
-		Scanner in = new Scanner(new File("in.txt"));
+		Scanner in = new Scanner(System.in);
 		while (in.hasNextLine()) {
 			String[] lineArgs = in.nextLine().split("\\s+");
 			int m = Integer.parseInt(lineArgs[0]);
@@ -58,21 +71,17 @@ public class CrossWord
 	
 	
 	public static char[][] solve(HashMap<Integer, ArrayList<String>> words, HashSet<String> usedWords,
-			ArrayList<Placement> placements, HashSet<Placement> usedPlaces, char[][] puzzle, 
-			int totalWords)
+			ArrayList<Placement> placements, HashSet<Placement> usedPlaces, char[][] puzzle, int totalWords)
 	{
 		if (usedWords.size() == totalWords && checkSolution(puzzle)) {
 			goalPuzzle = puzzle;
 			return puzzle;
 		}
-		printBoard(puzzle);
-		System.out.println();
-		match = false;
+		
 		for (Placement p : placements) {
 			if (usedPlaces.contains(p))
 				continue;
 	
-			match = true;
 			boolean foundWord = false;
 			for (String word : words.get(p.length)) {
 				if (usedWords.contains(word))
@@ -85,14 +94,12 @@ public class CrossWord
 					usedWords.add(word);
 					foundWord = true;
 					
-					puzzle = solve(words, usedWords, p.neighbors, usedPlaces, newPuzzle, totalWords);
+					newPuzzle = solve(words, usedWords, placements, usedPlaces, newPuzzle, totalWords);
 					if (goalPuzzle != null)
 						return newPuzzle;
 					
-					if (match) {
-						usedPlaces.remove(p);
-						usedWords.remove(word);
-					}
+					usedPlaces.remove(p);
+					usedWords.remove(word);
 				}
 			}
 			if (!foundWord) {
@@ -166,14 +173,7 @@ public class CrossWord
 				if (puzzle[i][j] == '#' || i == rows - 1) {
 					int len = (i == rows - 1 && puzzle[i][j] == '.') ? i - row + 1 : i - row;
 					if (len > 1 && words.containsKey(len)) {
-						Placement newPlacement = new Placement(row, j, VERTICAL, len);
-						verticalPlacements.add(newPlacement);
-						for (Placement p: horizontalPlacements) {
-							if (p.intersects(newPlacement)) {
-								p.neighbors.add(newPlacement);
-								newPlacement.neighbors.add(p);
-							}
-						}
+						verticalPlacements.add(new Placement(row, j, VERTICAL, len));
 					}
 					row = i + 1;
 				}
@@ -191,11 +191,9 @@ public class CrossWord
 		public int row, col;
 		public int orientation;
 		public int length;
-		public ArrayList<Placement> neighbors;
 		
 		public Placement(int row, int col, int orientation, int length) {
 			this.row = row; this.col = col; this.orientation = orientation; this.length = length;
-			this.neighbors = new ArrayList<Placement>();
 		}
 		
 		public boolean canBePlaced(String word, char[][] puzzle) {
@@ -229,12 +227,6 @@ public class CrossWord
 				count++;
 			}
 		}
-		
-		public boolean intersects(Placement other) {
-			return row >= other.row && row <= other.row + other.length &&
-					col <= other.col && col + length >= other.col;
-		}
-		
 		
 		@Override
 		public int hashCode() {
