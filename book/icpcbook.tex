@@ -1,0 +1,62 @@
+\documentclass[10pt]{book} 
+
+\usepackage{amsmath}
+\usepackage{palatino}
+\usepackage{parskip}
+\usepackage{minted}
+\usepackage[margin=1in,letterpaper]{geometry}
+\usepackage{fancyvrb}
+\usepackage{color}
+\definecolor{maroon}{RGB}{66,00,00}
+
+\usepackage{hyperref}
+% http://en.wikibooks.org/wiki/LaTeX/Hyperlinks
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=maroon,          % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=maroon         % color of external links
+}
+\usepackage{url}
+\usepackage{fancyhdr}
+% \pagestyle{fancy}
+\usepackage{makeidx} %If you want to generate an index, automatically 
+\usepackage{graphicx} %If you want to include postscript graphics 
+\makeindex
+
+\begin{document} 
+
+\author{ACM Programming Team 2012} 
+\title{VT ACM ICPC Handbook} 
+\date{\today{}} 
+
+\include{figures} 
+
+\frontmatter 
+\maketitle
+\tableofcontents 
+\include{preface} 
+
+\mainmatter 
+\include{stringprocessing} 
+\include{geometry} 
+
+\backmatter 
+%\include{glossary} 
+%\include{notat} 
+
+\bibliographystyle{plain} %The style you want to use for references. 
+\bibliography{references} %The files containing all the articles and books you ever referenced. 
+
+\printindex
+
+\end{document}
+
