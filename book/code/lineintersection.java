@@ -9,7 +9,7 @@ static Point2D.Double intersects(Point2D.Double p1, Point2D.Double p2,
     double x12 = det(p1.x, p1.y, p2.x, p2.y);
     double x34 = det(p3.x, p3.y, p4.x, p4.y);
 
-    // assert d != 0 (lines are known to intersect)
+    // assert d != 0 (lines are known to intersect and are not at right angle)
     double x = det(x12, p1.x-p2.x, x34, p3.x-p4.x) / d;
     double y = det(x12, p1.y-p2.y, x34, p3.y-p4.y) / d;
     return new Point2D.Double(x, y);

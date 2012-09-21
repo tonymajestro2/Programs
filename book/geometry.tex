@@ -23,8 +23,8 @@ lines, ellipses, rectangles and some curves.
 \begin{itemize}
 \item "is contained in".  java.awt.geom.Shape provide a contains() method to test if a point
     is contained in a shape.  Contains() returns true if the point is in the interior, and false
-    if the point is outside the shape. However, it may return true or false if the point is 
-    on the shape boundary.
+    if the point is outside the shape. However, it \textbf{may return true or false if the point is 
+    on the shape boundary.}
 
 \item "intersects."  Tests if a shape intersects with a rectangle.
     Can also test if two lines or line segments intersect, but cannot find the point of
@@ -35,6 +35,7 @@ lines, ellipses, rectangles and some curves.
 \section{Coordinate Geometry}
 
 \subsection{Line/Line Intersection}
+\label{sec:lineintersection}
 \index{Line/Line Intersections}
 
 \begin{figure}
@@ -121,13 +122,15 @@ Source: \href{http://en.wikipedia.org/wiki/Line-line_intersection}{http://en.wik
 
 \paragraph{Notes}
 \begin{itemize}
-\item Parallel or coincident lines:
+\item Does not handle parallel or coincident lines:
     Denominator will be zero:
     \[
         (x_1 - x_2) (y_3 - y_4) - (y_1 - y_2) (x_3 - x_4) = 0
     \]
-\item One line horizontal ($y_1 = y_2$ or $y_3 = y_4$), the other vertical ($x_1 = x_2$ or $x_3 = x_4$) will also
-    give a 0 determinant, but the lines will intersect.  Handle as special case if problem allows it.
+\item Does not handle if lines are each others' normal (i.e., at a right angle).
+    If line is horizontal ($y_1 = y_2$ or $y_3 = y_4$), and the other vertical ($x_1 = x_2$ or $x_3 = x_4$) 
+    denominator will also be a 0 determinant, but the lines will intersect.  
+    Handle as special case if problem allows it.
 
 \item Intersection point may be outside the given segments.
 
@@ -136,6 +139,9 @@ Source: \href{http://en.wikipedia.org/wiki/Line-line_intersection}{http://en.wik
 
 \paragraph{Code}
 
+This code is from a solution to 2011/F (Section~\ref{sec:2011-f-lineofsight}) where the 
+parallel and rectangular cases do not occur. (TBD: provide complete implementation.)
+
 \inputminted{java}{code/lineintersection.java}
 
 %
@@ -143,6 +149,7 @@ Source: \href{http://en.wikipedia.org/wiki/Line-line_intersection}{http://en.wik
 %
 
 \subsection{Area of a Polygon}
+\label{sec:areapolygon}
 \index{Polygon!Area}
 \index{Area!Polygon}
 \index{Polygon}
@@ -198,9 +205,11 @@ Figure~\ref{fig:polygonareadeterminant} shows how to multiply this out
 \begin{itemize}
 \item Works for any simple polygon (concave or convex)
 \item Does not work for complex polygons (when any edges intersect)
+\item Points \textbf{must be ordered} if polygon has more than 3 vertices, or output is junk.
 \item A is positive if points are in counterclockwise order, negative if points are in clockwise order.
-    See the use Math.abs() in code below.
+    See the use of Math.abs() in code below.
 \item Triangle and any Quadrilateral are, of course, just special cases.
+    For triangles, order does not matter.
 \end{itemize}
 
 \paragraph{Code}

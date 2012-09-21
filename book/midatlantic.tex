@@ -1,0 +1,67 @@
+\chapter{Mid-Atlantic Problem Sets}
+
+This chapter contains some notes about the problems occurring in the Mid-Atlantic
+problem set.  We focus on this corpus in particular because there are recurring
+themes since the problems have been created by the same person (or team) for
+multiple years.
+
+\section{2005}
+
+\href{(Problem PDF 2005)}{http://midatl.radford.edu/docs/pastProblems/05contest/MidAtlantic2005.pdf}
+
+\subsection{C Extrusion}
+\label{sec:2005-c-extrusion}
+
+Straightforward application of polygon area formula, see Section~\ref{sec:areapolygon}.
+
+\section{2006}
+\href{(Problem PDF 2006)}{http://midatl.radford.edu/docs/pastProblems/06contest/MidAtlantic2006.pdf}
+
+\subsection{E Marbles}
+\label{sec:2006-e-marbles}
+A simple state space exploration problem solvable with straightforward BFS exploration.
+Catch: judge input data missed the "0 0 0" line.
+
+\section{2007}
+\href{(Problem PDF 2007)}{http://midatl.radford.edu/docs/pastProblems/07contest/MidAtlantic2007.pdf}
+
+\subsection{B Mobiles Alabama}
+\label{sec:2007-b-mobile}
+
+Lexical analysis benefits from zero-width lookaround~\ref{sec:lookaroundsplitting}, although
+simpler solutions (replacing '(' and ')' with ' ( ' and ' ) ' before splitting on whitespace
+may work, too.
+Recursive descent parsing should be used to analyse the syntactical structure of the input.
+
+\subsection{D Witness Redaction}
+\label{sec:2007-d-witness}
+This problem can be solved with regular expressions and zero-width lookaround splitting.
+See Section~\ref{sec:lookaroundsplitting}.
+
+\section{2008}
+\href{(Problem PDF 2008)}{http://midatl.radford.edu/docs/pastProblems/08contest/MidAtlantic2008.pdf}
+
+\subsection{G Stems Sell}
+\label{sec:2008-g-stems}
+
+Can be solved with regular expressions.
+
+\href{Judge data}{http://midatl.radford.edu/docs/pastProblems/08contest/JudgingData/G-stems/}
+appears broken, even on ICPC site.
+
+\section{2011}
+
+\href{(Problem PDF 2011)}{http://midatl.radford.edu/docs/pastProblems/11contest/MidAtlantic2011.pdf}
+
+\subsection{B Raggedy, Raggedy}
+\label{sec:2011-b-raggedy}
+
+This problem can be solved using dynamic programming.
+Note that there may be leading spaces on some input lines.
+
+\subsection{F Line of Sight}
+\label{sec:2011-f-lineofsight}
+
+Straightforward application of area of polygon~\ref{sec:areapolygon} and line intersection~\ref{sec:lineintersection}.
+Note that parameters of the problem even exclude corner cases for line intersection (e.g. parallel lines, right angles).
+
