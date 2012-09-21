@@ -1,7 +1,7 @@
 /**
  * Tony Majestro (tmajest)
  * 
- * Passes ICPC online judge
+ * Passes IMPC online judge
  */
 
 import java.util.ArrayDeque;
@@ -188,13 +188,7 @@ public class BlockGame
 		
 		@Override
 		public boolean equals(Object o) {
-			State other = (State) o;
-			for (int i = 0; i < BOARD_LEN; i++) {
-				if (!Arrays.equals(board[i], other.board[i])) {
-					return false;
-				}
-			}
-			return true;
+			return Arrays.deepEquals(board, ((State)o).board);
 		}
 		
 		private List<Block> deepCopyBlocks() {
