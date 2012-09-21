@@ -31,6 +31,7 @@
 \usepackage{makeidx} %If you want to generate an index, automatically 
 \usepackage{graphicx} %If you want to include postscript graphics 
 \makeindex
+\input{defs}
 
 \begin{document} 
 
@@ -46,10 +47,13 @@
 \include{preface} 
 
 \mainmatter 
-\include{gotchas} 
+\include{stdlibs} 
+\include{simulation} 
+\include{searching} 
 \include{stringprocessing} 
 \include{geometry} 
 \include{midatlantic} 
+\include{gotchas} 
 
 \backmatter 
 %\include{glossary} 

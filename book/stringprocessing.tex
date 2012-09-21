@@ -73,7 +73,7 @@ this style of matching.  These examples include:
 \item Finding sentences in a paragraph
 \end{itemize}
 
-\inputminted{java}{code/Lookaround.java}
+\inputminted[fontsize=\footnotesize,linenos=true]{java}{code/Lookaround.java}
 
 \subsection{NFA Simulation}
 \index{NFA!Simulation}
@@ -96,7 +96,7 @@ transition into state 1, whereas for the input string \texttt{abbc}, the first '
 transition into state 0, the second into state 1.
 
 Of course, we don't know which it's actually going to be - a NFA, in its theoretical 
-formulation, is defined to oracle-like pick the correct transition.  That's why we simulate
+formulation, is defined to pick the correct transition, like an Oracle would.  That's why we simulate
 it by simply keeping track of all possible (``active'') states the NFA might be in after each symbol.
 This is done using a set (HashSet or BitSet if the states are nicely numbered).
 For each input symbol, we compute the possible set of successor states based on the
@@ -113,7 +113,7 @@ A Python solution is shown below for succinctness.
     \label{fig:nfaexample}
 \end{figure}
 
-\inputminted{python}{code/ls.py}
+\inputminted[fontsize=\footnotesize,linenos=true]{python}{code/ls.py}
 
 \section{Parsing}
 \subsection{Recursive Descent}

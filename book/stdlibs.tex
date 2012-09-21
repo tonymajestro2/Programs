@@ -1,0 +1,56 @@
+\chapter{Standard Libraries}
+
+The ACM ICPC, at the time of this writing, allows the use of the JDK 1.6 libraries as well
+as the C++ STL.  Knowledge and mastery of the existing JDK classes is crucial for success.
+This chapter reviews some of the more commonly used classes.
+
+\section{Collection Classes}
+
+\subsection{Object Equivalence}
+\label{sec:objequivalence}
+
+Java allows you to define and equivalence relationship between objects using the
+\code{Object.equals} method, which is required for some problems.  If implemented,
+a conforming \code{hashCode} method must be implemented as well.
+Here are some hints.
+
+\begin{itemize}
+\item \textbf{Avoid gratuitous implementations.}  In the vast majority of cases,
+you will not need your own \code{equals/hashCode} function!  You only need equals/hashCode
+if your object is used as a key (not value!) in a Map or Set, \textbf{and} if the
+default implementation of equals (``two objects are equal if they are the same'') does
+not suffice.   Simply needing to store objects in a set, or using them as a map key,
+is not a justification for implementing equals().
+An example are search problems in a state space - you may create a 
+state instance that is equal to an already explored state.
+
+\item \textbf{Implement equals() correctly}.
+You need to compare all relevant fields to one another.
+\begin{minted}{java}
+@Override
+public boolean equals(Object _that) {
+    State that = (State)_that;
+    return this.field1 == that.field1 && ... && this.fieldn == that.fieldn;
+}
+\end{minted}
+For clarity, I recommend for \code{equals()} to always include all fields, and 
+to not include irrelevant fields in the object.  (That is also why I like separate
+previous hop maps rather than previous hop fields in BFS implementations,
+see Section~\ref{sec:bfs}.)
+
+\item \textbf{Understand the equals/hashCode contract}.
+The contract says two objects that are equal must have the same hashCode().
+It does not require that if two objects have the same hashCode() they must
+be equals().  There will be, in general, multiple objects mapping to the
+same hashCode().
+
+\item \textbf{Implement hashCode() efficiently.} 
+XXX CONTINUE HERE
+
+\item \textbf{Consider hashCode()'s distribution.} 
+The contract would be met by a degenerate function that returns always zero, but this
+would create terrible performance - in a hash map, all objects would be mapped
+to the same slot, resulting in linear lookup performance.
+
+\end{itemize}
+

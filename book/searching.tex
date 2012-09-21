@@ -1,0 +1,126 @@
+\chapter{Searching}
+\def\astar{$A^*$}
+
+\input{backtracking} 
+
+\section{State Space Exploration}
+
+In these problems, an initial state is to be transformed through a series of valid
+moves into one goal state, or possibly one of multiple possible goal states. 
+Examples include block puzzles or single-player games.
+These problems have the following characteristics:
+\begin{itemize}
+\item An optimal solution required: we want the minimal number of moves from the
+initial state to goal state, rather than just any.
+
+\item No obvious strategy.  Given a state, there's no obvious way to choose which
+move to make to get closer to the goal.  In fact, it's usually even difficult to
+tell how far we might be away from the goal state, except for too-optimistic
+lower bounds.  See also \astar{} in Section~\ref{sec:astar}.
+
+\end{itemize}
+
+\subsection{Breadth-First Search (BFS)}
+\label{sec:bfs}
+There are numerous ways of writing a BFS loop.  There are even more ways of
+getting it wrong.
+Here is one possible way:
+
+\inputminted[fontsize=\footnotesize,linenos=true]{java}{code/bfsloop.java}
+
+\paragraph{Notes.}  
+\begin{itemize}
+\item Adding the final state could be avoided by calling output() if a 
+final state is found, potentially saving the unnecessary expansion of states
+if the optimal goal state is already in the queue - however, then the case where 
+the initial state is final must be handled separately.  
+Seen in 2006/E Marbles~\ref{sec:2006-e-marbles} where the judge data contains
+the case that the initial state is final.
+
+\item The state class should use ducktyping and provide the necessary
+methods - isfinal, successors.  In addition, the state class must implement
+an object equivalence relationship (equals, hashCode) as described in 
+Section~\ref{sec:objequivalence}.
+\end{itemize}
+
+\paragraph{When Not To Use BFS.}
+
+There are some problems that may appear to be solvable using BFS, but are in fact 
+dynamic programming problems.  These are generally problems in which there are
+many transitions from states farther in the problem space to states that have
+been discovered much earlier.
+An example is 2007/C/Out of Sight.~\ref{sec:2007-c-sight}.
+
+\subsection{\astar}
+\label{sec:astar}
+
+\astar~\cite{Pearl:1984} is a classic algorithm to improve upon breadth-first search when an
+estimator function for states that estimates their distance to the goal state is known.
+Though an AI algorithm, it can yield guaranteed optimal solution if the estimator is chosen
+carefully.
+
+The idea is simple.  In BFS, we're examining nodes based on their distance from the start state. 
+So we'll look at, and expand, all states that are 6 moves away from the start *before* we 
+look at any state that's 7 moves from the start - simply because of the FIFO discipline in the queue.
+
+In \astar, instead of putting all to-be-explored states in a FIFO queue,
+we sort them by their "goodness," which is defined as a
+lower bound of how many moves a solution is away from the state.
+For instance, if a state A is 6 moves away from the start, and
+I know for sure that it is at least 10 moves away from the goal,
+it would get a goodness of 16 (6 + 10).  On the other hand, if a
+move B is 8 moves away from the start, and at least 4 moves away
+from the solution, its goodness is 12 and it's explored first.
+Note that we are not estimating how far the state is from
+the solution. We're simply constructing a function that says: this
+state is *at least* this far from a solution. It may be farther -
+our decision to explore state B may be wrong and the closest solution
+state may result from the exploration of A.
+
+Now the question is how to be able to say - quickly - that a state is
+``at least this many moves away from the goal.''  In general, that's
+tough since if we knew how many states a state is away from the goal,
+it would be much easier to solve the problem. However, there are some lower
+bounds that can be found - for instance, in a puzzle, we could count how
+many pieces are not in their final position, knowing that it'll take at
+least this many moves to get them there (assuming it's a puzzle like
+the traditional 15-piece puzzle where all pieces need to be sorted).
+Another function people have proposed is the sum of the Manhattan
+distances between each piece's current and its final position.  
+Again, it is clear that it will take at least this many moves.
+
+In competition problems you're practically never asked to find an 'almost'
+perfect heuristic solution - they ask
+you to compute the correct, and in search problems like these, the
+shortest solution.  \astar will provide you the optimal
+solution if the estimation function does not overestimate  - if it
+did, it might lead to the nearest goal state being placed behind a
+farther goal state in the queue.  That farther state might then be
+discovered first, and mistaken for the shortest solution.
+
+It's not a problem that the estimation function underestimates - in fact,
+it'll generally do that - this just means that \astar might waste some
+time exploring states it thinks are promising, but which do not actually
+lead to a solution.
+
+Converting a BFS to A-Star in Java is really simple.  Replace the entry
+of the BFS described in Section~\ref{sec:bfs} such that the BFS work
+queue uses a PriorityQueue like so:
+
+\inputminted[fontsize=\footnotesize,linenos=true]{java}{code/astar.java}
+
+Note how making dist final allows it to be used in the comparator.
+The code exploits that both PriorityQueue and ArrayDeque implement the
+Queue interface.
+
+\paragraph{Notes}  
+\begin{itemize}
+\item
+\astar will increase the cost of inserting and removing a state from the queue
+substantially - in a heap-based priority queue, 'offer()' and 'poll()' take O(log n) whereas 
+they are constant time O(1) operations on a Deque.  On the other hand, especially if the
+estimator function is too optimistic, the state space may only be marginally reduced.
+Recommendation: use A-Star only if BFS times out and/or if a good heuristic
+can be found.
+
+\end{itemize}
