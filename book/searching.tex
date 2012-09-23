@@ -15,8 +15,9 @@ initial state to goal state, rather than just any.
 
 \item No obvious strategy.  Given a state, there's no obvious way to choose which
 move to make to get closer to the goal.  In fact, it's usually even difficult to
-tell how far we might be away from the goal state, except for too-optimistic
-lower bounds.  See also \astar{} in Section~\ref{sec:astar}.
+tell how far we might be away from the goal state.  Any easy-to-find lower bounds
+for this distance to the goal might be far too optimistic.  
+See also \astar{} in Section~\ref{sec:astar}.
 
 \end{itemize}
 
@@ -41,6 +42,13 @@ the case that the initial state is final.
 methods - isfinal, successors.  In addition, the state class must implement
 an object equivalence relationship (equals, hashCode) as described in 
 Section~\ref{sec:objequivalence}.
+
+\item The example keeps track of both the path (via 'pred') and distance (via 'dist').
+    If the problem asks for only one of the two, the other can be omitted. In that
+    case, the insertion of a successor state should be guarded by the one remaining.
+    Note that both 'pred' and 'dist' have the invariant when encountering a state 
+    multiple times, only the first encountered state is kept in the map.
+
 \end{itemize}
 
 \paragraph{When Not To Use BFS.}
@@ -67,8 +75,8 @@ In \astar, instead of putting all to-be-explored states in a FIFO queue,
 we sort them by their "goodness," which is defined as a
 lower bound of how many moves a solution is away from the state.
 For instance, if a state A is 6 moves away from the start, and
-I know for sure that it is at least 10 moves away from the goal,
-it would get a goodness of 16 (6 + 10).  On the other hand, if a
+it is known that it is at least 10 moves away from the goal,
+it would have a goodness of 16 (6 + 10).  On the other hand, if a
 move B is 8 moves away from the start, and at least 4 moves away
 from the solution, its goodness is 12 and it's explored first.
 Note that we are not estimating how far the state is from
@@ -77,7 +85,7 @@ state is *at least* this far from a solution. It may be farther -
 our decision to explore state B may be wrong and the closest solution
 state may result from the exploration of A.
 
-Now the question is how to be able to say - quickly - that a state is
+The challenge lies in how to say - quickly - that a state is
 ``at least this many moves away from the goal.''  In general, that's
 tough since if we knew how many states a state is away from the goal,
 it would be much easier to solve the problem. However, there are some lower
@@ -85,14 +93,14 @@ bounds that can be found - for instance, in a puzzle, we could count how
 many pieces are not in their final position, knowing that it'll take at
 least this many moves to get them there (assuming it's a puzzle like
 the traditional 15-piece puzzle where all pieces need to be sorted).
-Another function people have proposed is the sum of the Manhattan
-distances between each piece's current and its final position.  
+Another possible function is the sum of the Manhattan
+distances between each piece's current and final position.  
 Again, it is clear that it will take at least this many moves.
 
-In competition problems you're practically never asked to find an 'almost'
+In competition problems you are practically never asked to find an 'almost'
 perfect heuristic solution - they ask
 you to compute the correct, and in search problems like these, the
-shortest solution.  \astar will provide you the optimal
+shortest solution.  \astar{} will provide you with the optimal
 solution if the estimation function does not overestimate  - if it
 did, it might lead to the nearest goal state being placed behind a
 farther goal state in the queue.  That farther state might then be

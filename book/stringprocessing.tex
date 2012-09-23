@@ -47,7 +47,7 @@ has zero width – therefore, the characters are returned as part of
 the previous token. In this example, s.next() would return '+'.
 
 Figure~\ref{fig:lookaheadsplit} shows a traditional scanner (top) and a scanner that
-uses both consuming and non-consuming delimiters (bottom): Note that
+uses both consuming and non-consuming delimiters (bottom): 
 if the delimiter used by the scanner does not consume any characters,
 the scanner will return the entire input stream. This is very useful if
 you need to manipulate a stream without losing any characters.
@@ -78,7 +78,8 @@ this style of matching.  These examples include:
 \subsection{NFA Simulation}
 \index{NFA!Simulation}
 
-The Regex engine in Java does not convert to a Thompson-DFA; it uses a backtracking algorithm
+The Regex engine in Java does not convert to a Thompson-DFA~\footnote{See~\cite{CoxRegexp:2007} for background
+on Thompson's idea}; it uses a backtracking algorithm
 to find out if a regular expression matches a string.  This leads to pathological cases with
 exponential runtime increase, particularly when the regular expression contains a large number
 of Kleene stars.
@@ -116,5 +117,29 @@ A Python solution is shown below for succinctness.
 \inputminted[fontsize=\footnotesize,linenos=true]{python}{code/ls.py}
 
 \section{Parsing}
+
+In programming problems, reading the input generally does not require parsing in the sense that
+the syntactic structure of the input is given as a context-free grammar.  When it does, it is
+usually part of the problem's challenge.  Though parsing, in general, is a wide topic area - 
+the cases occurring in programming contests are usually simple grammars that describe a LL(1)
+language, and the grammar is typically included in the problem's specification.
+
 \subsection{Recursive Descent}
+
+In a recursive descent parser, the structure of the code mirrors the structure of the grammar.
+Non-terminals are represented by functions.
+For instance, to read an equation which represents two expressions separated by a '=' terminal,
+the grammar rule
+\[
+    Equation \rightarrow Expression = Expression
+\]
+would be implemented by a method such as this:
+
+\inputminted[fontsize=\footnotesize,linenos=true]{python}{code/parseEquation.java}
+
+\code{lookahead()} must peek at the next input token, but must not consume it.
+A parser may call lookahead() multiple times before committing to nonterminal and
+consuming the token.
+Generally, a recursive-descent parser's methods return a data structure that represents the
+nonterminal implemented by that function.  Subtyping is commonly used to handle alternatives.
 

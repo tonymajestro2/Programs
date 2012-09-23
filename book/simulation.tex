@@ -22,8 +22,9 @@ period, for a total of 4 significant digits, making this approach feasible.
 \section{Discrete Event Simulation}
 
 Discrete Event Simulation is widely used to simulate physical phenomena, especially
-those that involve periodic and/or random events, as well as when events may or may
-not occur, depending on the state of the simulation.
+those that involve periodic and/or random events, as well as when the occurrence of
+future events depends on the state of the simulated world, rather than being fixed
+beforehand.
 
 The key idea is to maintain a timeline as a queue of future events, sorted
 by their timestamp.  Simulation time, aka virtual time, advances in jumps when

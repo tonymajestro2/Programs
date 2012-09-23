@@ -14,13 +14,13 @@ various problems posed at competitions.
     your team.)
     Seen in 2006/E Marbles~\ref{sec:2006-e-marbles}.
 
-\item \textbf{Trailing Spaces}.
+\item \textbf{Insignificant Trailing Spaces}.
     In problems that state "there is one word per line" we have observed trailing spaces
     which must be trimmed.   Advice: always use String.trim(), unless the spaces are
     significant, which we have not seen anywhere.
     Seen in 2007/D Witness~\ref{sec:2007-d-witness}.
 
-\item \textbf{Leading Spaces}.
+\item \textbf{Insignificant Leading Spaces}.
     In some problems, (insignificant) leading spaces may occur.  The catch here is that 
     naive splitting without trimming may produce an empty string in the first position.
     See bsh output below:
@@ -30,6 +30,14 @@ various problems posed at competitions.
     \end{Verbatim}
  
     Seen in 2011/B Raggedy~\ref{sec:2011-b-raggedy}.
+
+\item \textbf{Significant Leading and Trailing Spaces}.
+    Check if the problem allows for significant leading and trailing spaces, such as when
+    reading in grids or mazes or specified width/height.  Don't accidentally trim(), but don't
+    expect the trailing spaces, either.  Consider allocating and filling an array of desired
+    length and using System.arraycopy to copy the input.
+
+    Seen in 2011/H Road Rally~\ref{sec:2011-h-rally}.
 
 \end{enumerate}
 

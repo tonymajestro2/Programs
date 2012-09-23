@@ -15,42 +15,92 @@ a conforming \code{hashCode} method must be implemented as well.
 Here are some hints.
 
 \begin{itemize}
+\sloppypar
 \item \textbf{Avoid gratuitous implementations.}  In the vast majority of cases,
 you will not need your own \code{equals/hashCode} function!  You only need equals/hashCode
 if your object is used as a key (not value!) in a Map or Set, \textbf{and} if the
 default implementation of equals (``two objects are equal if they are the same'') does
 not suffice.   Simply needing to store objects in a set, or using them as a map key,
 is not a justification for implementing equals().
-An example are search problems in a state space - you may create a 
-state instance that is equal to an already explored state.
+An example of where equals is needed are search problems in a state space - you may 
+create a state instance that is equal to an already explored state kept track of
+in a 'visited' set or map.
 
 \item \textbf{Implement equals() correctly}.
 You need to compare all relevant fields to one another.
-\begin{minted}{java}
+\begin{minted}[fontsize=\footnotesize]{java}
 @Override
 public boolean equals(Object _that) {
     State that = (State)_that;
     return this.field1 == that.field1 && ... && this.fieldn == that.fieldn;
 }
+
+// or, as appropriate
+@Override
+public boolean equals(Object _that) {
+    State that = (State)_that;
+    return this.field1.equals(that.field1) && ... && this.fieldn.equals(that.fieldn);
+}
 \end{minted}
-For clarity, I recommend for \code{equals()} to always include all fields, and 
+For clarity, I recommend for \code{equals()} to always consider all fields, and 
 to not include irrelevant fields in the object.  (That is also why I like separate
-previous hop maps rather than previous hop fields in BFS implementations,
-see Section~\ref{sec:bfs}.)
+previous hop maps rather than previous hop fields, or distance fields in BFS implementations,
+see Section~\ref{sec:bfs}.)  The problem with selectively including some fields
+in the comparison, and not others, is that it opens the door to mistakes in which
+you accidentally use information from the wrong object.
 
 \item \textbf{Understand the equals/hashCode contract}.
 The contract says two objects that are equal must have the same hashCode().
 It does not require that if two objects have the same hashCode() they must
-be equals().  There will be, in general, multiple objects mapping to the
-same hashCode().
+be equals().  
 
 \item \textbf{Implement hashCode() efficiently.} 
-XXX CONTINUE HERE
+Rely on built-in functions, such as Arrays.hashCode() for arrays, or the built-in
+hashCode() functions for Strings and Lists, which are known to be good.
 
 \item \textbf{Consider hashCode()'s distribution.} 
 The contract would be met by a degenerate function that returns always zero, but this
 would create terrible performance - in a hash map, all objects would be mapped
 to the same slot, resulting in linear lookup performance.
+The chosen hash function should provide a distribution of hash values
+that is as uniformly random as possible. 
+Remember that Integer.hashCode does not use a 
+\href{http://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function}{Fowler-Noll-Vo}
+hash, but rather returns the integer itself; the resulting randomness will be
+small, especially if the number of items added dwarfs the range in which that integer varies.
+
+When combining the hashes of fields, prefer bitwise xor (\^) over addition
+or multiplication.  As an aside, it is not necessary that the lower bits are uniformly distributed -
+Java's HashMap implementation does not perform a simple modulo, but rather draws
+from higher-order bits, too:
+
+\inputminted[fontsize=\footnotesize,linenos=true]{java}{code/javautilHashMap.java}
+
+In my 2011/H Solution~\ref{sec:2011-h-rally}, execution time reduced from 87 to 29 
+seconds by changing the hash function to use xor of all three components instead 
+of multiplication of two components.
 
 \end{itemize}
 
+\subsection{Comparators}
+\label{sec:comparators}
+
+The most common uses of comparators are for sorting (Arrays.sort, Collections.sort, Collections.max, etc.), 
+binary trees (java.util.TreeMap), and sorted queues (java.util.PriorityQueue).
+Each use entails pitfalls.
+
+\begin{itemize}
+\item \textbf{Don't confuse partial orders with equality.}
+    The contract of
+    \href{http://docs.oracle.com/javase/6/docs/api/java/lang/Comparable.html#compareTo(T)}{compareTo}
+    requires that the relationship be transitive across $<$, $>$, and $=$.  That implies, for instance, 
+    that if $a > b \land b = c$ then $a > c$.
+    When dealing with partial orders do not treat incomparable elements as equal.  Notably,
+    in a partial order, it's well possible that $a < c$ if $a > b \land \lnot (b < c \lor b > c)$
+    Instead, either complete the order or use topological sorting.
+
+\item \textbf{Make the ordering consistent with equals.}
+    A comparator should return 0 iff .equals() returns true.   This is required, in particular, when
+    using TreeSets.  See \href{http://docs.oracle.com/javase/6/docs/api/java/lang/Comparable.html#compareTo(T)}{compareTo}.
+
+\end{itemize}

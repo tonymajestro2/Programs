@@ -7,7 +7,7 @@ multiple years.
 
 \section{2005}
 
-\href{http://midatl.radford.edu/docs/pastProblems/05contest/MidAtlantic2005.pdf}{(Problem PDF 2005)}
+\href{http://midatl.radford.edu/docs/pastProblems/05contest/MidAtlantic2005.pdf}{(Problem Set PDF 2005)}
 
 \subsection{C Extrusion}
 \label{sec:2005-c-extrusion}
@@ -15,7 +15,7 @@ multiple years.
 Straightforward application of polygon area formula, see Section~\ref{sec:areapolygon}.
 
 \section{2006}
-\href{http://midatl.radford.edu/docs/pastProblems/06contest/MidAtlantic2006.pdf}{(Problem PDF 2006)}
+\href{http://midatl.radford.edu/docs/pastProblems/06contest/MidAtlantic2006.pdf}{(Problem Set PDF 2006)}
 
 \subsection{E Marbles}
 \label{sec:2006-e-marbles}
@@ -23,15 +23,15 @@ A simple state space exploration problem solvable with straightforward BFS explo
 Catch: judge input data missed the "0 0 0" line.
 
 \section{2007}
-\href{http://midatl.radford.edu/docs/pastProblems/07contest/MidAtlantic2007.pdf}{(Problem PDF 2007)}
+\href{http://midatl.radford.edu/docs/pastProblems/07contest/MidAtlantic2007.pdf}{(Problem Set PDF 2007)}
 
 \subsection{B Mobiles Alabama}
 \label{sec:2007-b-mobile}
 
 Lexical analysis benefits from zero-width lookaround~\ref{sec:lookaroundsplitting}, although
-simpler solutions (replacing '(' and ')' with ' ( ' and ' ) ' before splitting on whitespace
-may work, too.
-Recursive descent parsing should be used to analyse the syntactical structure of the input.
+simpler solutions may work, too, such as replacing '(' and ')' with ' ( ' and ' ) ' before 
+splitting on whitespace.
+Recursive descent parsing should be used to analyze the syntactical structure of the input.
 
 \subsection{C Out Of Sight}
 \label{sec:2007-c-sight}
@@ -47,7 +47,7 @@ This problem can be solved with regular expressions and zero-width lookaround sp
 See Section~\ref{sec:lookaroundsplitting}.
 
 \section{2008}
-\href{http://midatl.radford.edu/docs/pastProblems/08contest/MidAtlantic2008.pdf}{(Problem PDF 2008)}
+\href{http://midatl.radford.edu/docs/pastProblems/08contest/MidAtlantic2008.pdf}{(Problem Set PDF 2008)}
 
 \subsection{G Stems Sell}
 \label{sec:2008-g-stems}
@@ -60,19 +60,19 @@ appears broken, even on ICPC site.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{2010}
-\href{http://midatl.radford.edu/docs/pastProblems/10contest/MidAtlantic2010.pdf}{(Problem PDF 2010)}
+\href{http://midatl.radford.edu/docs/pastProblems/10contest/MidAtlantic2010.pdf}{(Problem Set PDF 2010)}
 
 \subsection{C Cells}
 \label{sec:2010-c-cells}
 
-Solvable using Monte Carlo simulation.  May use java.awt.geom.* to implement containment check.
+Solvable using Monte Carlo simulation.  Can use java.awt.geom.* to implement containment check.
 Also solvable using numerical integration (in polar coordinates).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{2011}
 
-\href{http://midatl.radford.edu/docs/pastProblems/11contest/MidAtlantic2011.pdf}{(Problem PDF 2011)}
+\href{http://midatl.radford.edu/docs/pastProblems/11contest/MidAtlantic2011.pdf}{(Problem Set PDF 2011)}
 
 \subsection{B Raggedy, Raggedy}
 \label{sec:2011-b-raggedy}
@@ -85,4 +85,12 @@ Note that there may be leading spaces on some input lines.
 
 Straightforward application of area of polygon~\ref{sec:areapolygon} and line intersection~\ref{sec:lineintersection}.
 Note that parameters of the problem even exclude corner cases for line intersection (e.g. parallel lines, right angles).
+
+\subsection{H Road Rally}
+\label{sec:2011-h-rally}
+
+Straightforward state space exploration using BFS, see Section~\ref{sec:bfs}.
+
+Input handling requires care since handout is misleading by showing race tracks enclosed in 'x' which is not
+required.  Also, the 'horizontal' and 'vertical' distance is to be treated signed, not absolute.
 
