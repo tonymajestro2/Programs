@@ -138,7 +138,7 @@ would be implemented by a method such as this:
 \inputminted[fontsize=\footnotesize,linenos=true]{python}{code/parseEquation.java}
 
 \code{lookahead()} must peek at the next input token, but must not consume it.
-A parser may call lookahead() multiple times before committing to nonterminal and
+A parser may call lookahead() multiple times before committing to a nonterminal and
 consuming the token.
 Generally, a recursive-descent parser's methods return a data structure that represents the
 nonterminal implemented by that function.  Subtyping is commonly used to handle alternatives.

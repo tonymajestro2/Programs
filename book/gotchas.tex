@@ -1,5 +1,7 @@
 \chapter{Gotchas}
 
+\label{sec:gotchas}
+
 Common mistakes and idiosyncrasies observed in the judge input and specification of
 various problems posed at competitions.
 
@@ -38,6 +40,24 @@ various problems posed at competitions.
     length and using System.arraycopy to copy the input.
 
     Seen in 2011/H Road Rally~\ref{sec:2011-h-rally}.
+
+\item \textbf{Forgetting the ``input is solution'' case.}
+    In some problems, it may be that the input is already the desired solution, though the
+    sample data usually does not cover the case.
+    Make sure your code handles this.  For instance, in a BFS, it's easy to miss if you only
+    test successor states for finality.
+    Seen in 2006/E Marbles~\ref{sec:2006-e-marbles}.
+
+\item \textbf{Forgetting the "n = 1" case.}
+    Make sure that you don't rely on there being at least 2 items in sorting and other
+    problems, unless the problem states that.  Notably, if $n = 1$, a comparator
+    function might not be invoked.
+    The code below attempts to be clever and save a loop over \code{sl} by setting the 
+    \code{wLoss} map entry inside the comparator.
+
+    \inputminted[fontsize=\footnotesize,linenos=true]{java}{code/sortn1bug.java}
+
+    Seen in 2011/E Losers are Winners~\ref{sec:2011-e-losers}.
 
 \end{enumerate}
 

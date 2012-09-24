@@ -16,7 +16,7 @@ A determinant of a $2x2$ matrix is defined as
 \section{java.awt.geom}
 
 The \texttt{java.awt.geom} and \texttt{java.awt} packages have, albeit limited, facilities
-for geometric problems.  There are classes to represent shapes - see 
+for geometric problems.  There are classes to represent shapes - see
 \href{http://docs.oracle.com/javase/6/docs/api/java/awt/Shape.html}{java.awt.Shape}, including
 lines, ellipses, rectangles and some curves.
 
@@ -24,11 +24,33 @@ lines, ellipses, rectangles and some curves.
 \item "is contained in".  java.awt.geom.Shape provide a contains() method to test if a point
     is contained in a shape.  Contains() returns true if the point is in the interior, and false
     if the point is outside the shape. However, it \textbf{may return true or false if the point is 
-    on the shape boundary.}
+    on the shape boundary.} 
+
+\begin{figure}
+    \centering
+    \includegraphics[height=2in]{outcode.pdf}
+    \caption{Outcode - note that points that lie on any of the sidelines are considered inside.}
+    \label{fig:outcode}
+\end{figure}
+
+\item "outcode". Outcodes were invented by Cohen-Sutherland; they are used for clipping
+    in computer graphics.  java.awt.geom.Rectangle2D provides an outcode() method.
+    The result is 0 if a point is inside or on any sideline of the rectangle; otherwise 
+    the result is a
+    combination of bits that represent where the point lies in relationship to the
+    rectangle, as shown in Figure~\ref{fig:outcode}.
+    For clipping of lines, the outcodes of the start and end point are
+    computed, which then allows a quick identification of whether the line is inside,
+    must be clipped, may be ignored, or needs further investigation.
+    A useful property of outcode() is that it can substitute as a replacement for
+    contains() in case where a point may lie on an edge but should be considered
+    inside. 
 
 \item "intersects."  Tests if a shape intersects with a rectangle.
     Can also test if two lines or line segments intersect, but cannot find the point of
     intersection.
+
+\item "is point on line segment." Implements this as Line2D.ptSegDistSq(Point2D) $<$ 1e-9.
 
 \end{itemize}
 
@@ -214,4 +236,8 @@ Figure~\ref{fig:polygonareadeterminant} shows how to multiply this out
 
 \paragraph{Code}
 \inputminted[fontsize=\footnotesize,linenos=true]{java}{code/polygonarea.java}
+
+Special case of a triangle:
+
+\inputminted[fontsize=\footnotesize,linenos=true]{java}{code/triangleareacoord.java}
 
