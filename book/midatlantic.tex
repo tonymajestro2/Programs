@@ -59,6 +59,21 @@ appears broken, even on ICPC site.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{2009}
+\href{http://midatl.radford.edu/docs/pastProblems/09contest/MidAtlantic2009.pdf}{(Problem Set PDF 2009)}
+
+\subsection{G Stringer}
+\label{sec:2009-g-stringer}
+
+Combinatorics and recursion.  The instructions says that K fits into a 32-bit integer, but 
+the judge data in fact contains K that require 64-bit integers.  I'm guessing this was clarified
+during the contest.
+
+A brute force approach (e.g., STL \code{next\_permutation} or manual generation of permutations) 
+will not work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{2010}
 \href{http://midatl.radford.edu/docs/pastProblems/10contest/MidAtlantic2010.pdf}{(Problem Set PDF 2010)}
 
@@ -67,6 +82,12 @@ appears broken, even on ICPC site.
 
 Solvable using Monte Carlo simulation.  Can use java.awt.geom.* to implement containment check.
 Also solvable using numerical integration (in polar coordinates).
+
+\subsection{D Not One Bit More}
+\label{sec:2010-d-bit}
+
+Requires combinatorics and recursion.
+Note that the provided range ($HI <= 10^{18}$) rules out any brute force approach.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
