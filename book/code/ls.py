@@ -33,8 +33,7 @@ for i in range(N):
     # simulate NFA
     activestates = set([firststate])
     for f in fname:
-        activestates = set(d for s in activestates \
-                                 for d in s.transitions[f])
+        activestates = set(d for s in activestates for d in s.transitions[f])
 
     if laststate in activestates:
         print fname

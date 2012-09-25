@@ -7,12 +7,13 @@ We have seen two characteristics of these problems:
 \begin{itemize}
 \item They are designed such that brute-force approaches that include the enumeration of
     permutations or combinations will time out.  A telltale sign is if the problem allows
-    ranges for its input parameters that exceed 32 bits ($2^{32} ~ 4 x 10^9$) or allow
-    for up to $10^{18}$.  Reminder: $2^{63} ~ 9 x 10^{18}$
+    ranges for its input parameters that exceed 32 bits ($2^{32} \sim 4 x 10^9$) or allow
+    for up to $10^{18}$.  Reminder: $2^{63} \sim 9 x 10^{18}$
 \item Because the input sizes are such that brute-force enumeration is ruled out, there
     is a risk of integer overflow when computing binomial cofficient and factorials.
 \end{itemize}
 
+\index{Permutations}
 \textbf{Permutations of length $k$ of $n$ elements, allowing for repetitions}: 
 \[
     n^k
@@ -27,6 +28,7 @@ of length $k$ is equal to number of ways in which to form $k$ bits ($2^k$).
 
 \inputjava{bigintegerfactorial}
 
+\index{Factorial}
 \textbf{Number of unique permutations when elements occur multiple times.}  Assume $a_i$ may be repeated $k_i$ times. 
     Let $L = \sum_{i = 1}^{n} k_i$ the sum of their frequencies.
 
@@ -36,6 +38,8 @@ of length $k$ is equal to number of ways in which to form $k$ bits ($2^k$).
 Example: unique permutations of (aabb) is $L = 4$, so $\frac{4!}{2! 2!} = 6$.  The permutations are
 (aabb), (abab), (abba), (baab), (baba), (bbaa).
 
+\index{Combinations}
+\index{Binomial Coefficient}
 \textbf{Combinations of $k$ out of $n$ elements, no repetition}:
 \[
     \binom{n}{k} = \frac{n!}{k! (n-k)!}
@@ -52,7 +56,7 @@ down if/when needed, as in the example below:
 \inputjava{bigintegerbinom}
 
 Note that Java does not have an unsigned 64-bit type, so above code will fail for 
-coefficients that are $2^{63} <= \binom{n}{k} < 2^{64}$.  
+coefficients that are $2^{63} \leq \binom{n}{k} < 2^{64}$.  
 For the same reason, however, judge data usually avoids that range.
 Code above is from solution to 2010/D Bit~\ref{sec:2010-d-bit}
 
