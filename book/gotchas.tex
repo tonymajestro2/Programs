@@ -1,0 +1,63 @@
+\chapter{Gotchas}
+
+\label{sec:gotchas}
+
+Common mistakes and idiosyncrasies observed in the judge input and specification of
+various problems posed at competitions.
+
+\begin{enumerate}
+\item \textbf{Judge input not terminated as required}. Typically, the problem states that
+    there's some way to identify the end of input without having to rely on EOF.
+    We've observed judge input, however, where EOF terminated the input.
+    You should try to write your input loop such that your solution works whether
+    the input is terminated by EOF or by the specified end-of-input delimiter.
+    This strategy may allow you to submit a correct solution even before the mistake
+    is discovered (and may even lead to a delay in when it's discovered that would benefit
+    your team.)
+    Seen in 2006/E Marbles~\ref{sec:2006-e-marbles}.
+
+\item \textbf{Insignificant Trailing Spaces}.
+    In problems that state "there is one word per line" we have observed trailing spaces
+    which must be trimmed.   Advice: always use String.trim(), unless the spaces are
+    significant, which we have not seen anywhere.
+    Seen in 2007/D Witness~\ref{sec:2007-d-witness}.
+
+\item \textbf{Insignificant Leading Spaces}.
+    In some problems, (insignificant) leading spaces may occur.  The catch here is that 
+    naive splitting without trimming may produce an empty string in the first position.
+    See bsh output below:
+    \begin{Verbatim}
+    % System.out.println(Arrays.toString("  word1  word2  ".split("\\s+")));
+    [, word1, word2]
+    \end{Verbatim}
+ 
+    Seen in 2011/B Raggedy~\ref{sec:2011-b-raggedy}.
+
+\item \textbf{Significant Leading and Trailing Spaces}.
+    Check if the problem allows for significant leading and trailing spaces, such as when
+    reading in grids or mazes or specified width/height.  Don't accidentally trim(), but don't
+    expect the trailing spaces, either.  Consider allocating and filling an array of desired
+    length and using System.arraycopy to copy the input.
+
+    Seen in 2011/H Road Rally~\ref{sec:2011-h-rally}.
+
+\item \textbf{Forgetting the ``input is solution'' case.}
+    In some problems, it may be that the input is already the desired solution, though the
+    sample data usually does not cover the case.
+    Make sure your code handles this.  For instance, in a BFS, it's easy to miss if you only
+    test successor states for finality.
+    Seen in 2006/E Marbles~\ref{sec:2006-e-marbles}.
+
+\item \textbf{Forgetting the "n = 1" case.}
+    Make sure that you don't rely on there being at least 2 items in sorting and other
+    problems, unless the problem states that.  Notably, if $n = 1$, a comparator
+    function might not be invoked.
+    The code below attempts to be clever and save a loop over \code{sl} by setting the 
+    \code{wLoss} map entry inside the comparator.
+
+    \inputminted[fontsize=\footnotesize,linenos=true]{java}{code/sortn1bug.java}
+
+    Seen in 2011/E Losers are Winners~\ref{sec:2011-e-losers}.
+
+\end{enumerate}
+

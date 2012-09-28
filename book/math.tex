@@ -1,0 +1,67 @@
+\chapter{Mathematics}
+
+\section{Combinatorics}
+
+A number of problems require basic knowledge of combinatorics.  
+We have seen two characteristics of these problems:
+\begin{itemize}
+\item They are designed such that brute-force approaches that include the enumeration of
+    permutations or combinations will time out.  A telltale sign is if the problem allows
+    ranges for its input parameters that exceed 32 bits ($2^{32} \sim 4 x 10^9$) or allow
+    for up to $10^{18}$.  Reminder: $2^{63} \sim 9 x 10^{18}$
+\item Because the input sizes are such that brute-force enumeration is ruled out, there
+    is a risk of integer overflow when computing binomial cofficient and factorials.
+\end{itemize}
+
+\index{Permutations}
+\textbf{Permutations of length $k$ of $n$ elements, allowing for repetitions}: 
+\[
+    n^k
+\]
+Important special case is $n=2$ - number of permutations
+of length $k$ is equal to number of ways in which to form $k$ bits ($2^k$).
+
+\textbf{Permutations of $n$ elements, no repetitions}: 
+\[
+    n! = n (n-1) (n-2) \ldots 1
+\]
+
+\inputjava{bigintegerfactorial}
+
+\index{Factorial}
+\textbf{Number of unique permutations when elements occur multiple times.}  Assume $a_i$ may be repeated $k_i$ times. 
+    Let $L = \sum_{i = 1}^{n} k_i$ the sum of their frequencies.
+
+\[
+    \frac{L!}{k_1! k_2! \ldots ... k_n!}
+\]
+Example: unique permutations of (aabb) is $L = 4$, so $\frac{4!}{2! 2!} = 6$.  The permutations are
+(aabb), (abab), (abba), (baab), (baba), (bbaa).
+
+\index{Combinations}
+\index{Binomial Coefficient}
+\textbf{Combinations of $k$ out of $n$ elements, no repetition}:
+\[
+    \binom{n}{k} = \frac{n!}{k! (n-k)!}
+\]
+
+Aside: C++ is a valid language at the ICPC, but unlike Java, C++ does not have a standard
+library for arbitrary-size integers that is accessible during the contest.  This has led to problems in which
+the problem states that the result fits into a 64-bit long, but where the straightforward
+application of the formula for $n!$ or $\binom{n}{k}$ would lead to integer overflow.
+
+In those cases, it is recommended to perform the arithmetic in BigInteger and then convert
+down if/when needed, as in the example below:
+
+\inputjava{bigintegerbinom}
+
+Note that Java does not have an unsigned 64-bit type, so above code will fail for 
+coefficients that are $2^{63} \leq \binom{n}{k} < 2^{64}$.  
+For the same reason, however, judge data usually avoids that range.
+Code above is from solution to 2010/D Bit~\ref{sec:2010-d-bit}
+
+\textbf{Combinations of $k$ out of $n$ elements, can repeat any element any number of times}:
+\[
+    \binom{n + k - 1}{k}
+\]
+

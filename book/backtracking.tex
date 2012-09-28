@@ -1,0 +1,43 @@
+\section{Backtracking}
+\label{sec:backtracking}
+\index{Backtracking}
+
+Bitner~\cite{Bitner:1975} first wrote up the underlying idea of backtracking in 1975.
+While some ideas of that paper (notably, the use of macros) reflect specific implementation
+ideas of that time, the rest is still relevant.
+
+A canonical example of simple backtracking is to solve the N-Queens problem - arrange N queens
+on a chessboard of size NxN such that no two can attack each other.  In this case, each
+row must contain exactly one queen; the backtracking algorithm places queens on each square
+in rows 1, 2, ..., N until the next queen either cannot be placed or a solution is found.
+
+\inputjava{NQueens}
+
+\paragraph{General Structure.}
+The general structure of a backtracking function is
+\begin{verbatim}
+backtrack(<arguments that reflect partial solution> args)
+{
+    if (args say solution is found) {
+        // process solution
+        return <a solution was found>;
+    }
+
+    S = sort possible next steps by likelihood of finding a solution
+
+    for (Steps s in S) {
+        augment partial solution with s
+        if (augmented solution is still feasible)
+            backtrack(args');
+        remove s from partial solution (undo)
+    }
+    return <no solution found>
+}
+\end{verbatim}
+Alternatively, it is often convenient to clone the partial solution before augmenting it
+with 's', which makes the undo step unnecessary.
+
+\paragraph{Notes}
+\begin{itemize}
+\item Continue here.
+\end{itemize}

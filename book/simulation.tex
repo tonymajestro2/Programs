@@ -1,0 +1,50 @@
+\chapter{Simulation}
+
+While many simulation problems can be solved ad-hoc, some require, or may benefit
+from, a more principled approach.
+
+\section{Monte Carlo Methods}
+
+In some cases, random sampling might provide a solution.
+For instance, the code below computes $\pi$ by examining whether
+randomly produced $(x, y)$ samples are inside or outside the unit 
+circle in the northeast quadrant.
+
+\inputminted[fontsize=\footnotesize,linenos=true]{java}{code/Pi.java}
+
+\paragraph{Precision} is generally not very good, mainly due to the  
+statistical properties of the underlying pseudo-random number generator (PRNG).
+Increasing the number of samples will yield diminishing returns quickly.
+As a rule of thumb, don't expect more than 4 significant digits.
+For example, 2010/Cells~\ref{sec:2010-c-cells} asks for a percentage with 2 digits after the
+period, for a total of 4 significant digits, making this approach feasible.
+
+\section{Discrete Event Simulation}
+
+Discrete Event Simulation is widely used to simulate physical phenomena, especially
+those that involve periodic and/or random events, as well as when the occurrence of
+future events depends on the state of the simulated world, rather than being fixed
+beforehand.
+
+The key idea is to maintain a timeline as a queue of future events, sorted
+by their timestamp.  Simulation time, aka virtual time, advances in jumps when
+the next upcoming event is pulled off the queue.  Time jumps over period in which
+no events are scheduled (unlike a continuous simulation in which time increases
+in small, but constant, steps).
+
+Event handlers may query the current time and they may schedule future events.
+Discrete Event simulations contain a typical core: a way to represent events, 
+a queue to sort them, and an event loop that processes the event queue until
+either the maximum simulation time is reached or a solution to the problem is found.
+Recommended implementation strategy is to use immutable event objects that are
+inserted when scheduled and discarded after dispatch.
+
+Example: \href{http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=3&page=show_problem&problem=97}{UVA 00161}
+is an example of a problem which can be solved with DES.  Note, however, that the small simulation time
+frame (18,000 seconds) also allows a continuous simulation approach, simply simulating every second,
+rather than only those points in time when a traffic light changes.
+This is a very simple example, with only 3 event types, all implemented in one
+class LightChange.
+
+\inputminted[fontsize=\footnotesize,linenos=true]{java}{code/UVA00161TrafficLights.java}
+
