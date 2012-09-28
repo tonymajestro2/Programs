@@ -1,9 +1,8 @@
 
 import string
 import frequency
-import p2
 
-word = p2.word
+word = open('encryptedMessage.txt').read().rstrip()
 d = dict([(letter, pos) for pos,letter in enumerate(string.lowercase)])
 
 def encrypt(p, a1, b1):
@@ -11,29 +10,93 @@ def encrypt(p, a1, b1):
     return ''.join([string.lowercase[x1] for x1 in numbers])
 
 
-def decrypt(c, a1, b1):
-    inverseA = getInverse(a1, 26)
-    numbers = [((d[x1] - b1) * inverseA) % 26 for x1 in c]
-    return ''.join([string.lowercase[x1] for x1 in numbers])
+# Decrypt message using Affine cipher
+# Equation for decryption is in the form: ((n - b) * inverseA) % 26
+def decrypt(message, a, b):
+    inverseA = getInverse(a, 26)
+    decryptedMessage = []
+    
+    # Convert each letter to a number and decrypt the number
+    for letter in message:
+        number = convertLettersToNumbers([letter])[0]
+        decryptedNumber = ((number - b) * inverseA) % 26
+        
+        # Convert back to a letter and add it to the list of
+        # decrypted letters
+        decryptedLetter = string.lowercase[decryptedNumber]
+        decryptedMessage.append(decryptedLetter)
+        
+    # Return the final decrypted string
+    return ''.join(decryptedMessage)
+    
+    
+    #numbers = [((d[x1] - b) * inverseA) % 26 for x1 in c]
+    #return ''.join([string.lowercase[x1] for x1 in numbers])
 
 
-def getInverse(a1, m):
+# Function to find the multiplicative inverse of a mod m.
+# The function will enumerate through all values [0, m). If
+# it finds a value whose product with a is relatively prime
+# with m, then it returns that number.  Otherwise the number
+# did not have an inverse mod m. 
+def getInverse(a, m):
     for i in range(0, m):
-        if (a1 * i) % m == 1:
+        if (a * i) % m == 1:
             return i
     return None
 
+
+# Gets all of the values between [0, m) that are relatively
+# prime with n.
 def getCoprimes(n):
-    def gcd(a1, b1):
-        a1,b1 = max(a1,b1), min(a1,b1)
-        if (b1 == 0):
-            return a1
-        return gcd(b1, a1 % b1)
+    
+    # Helper function gcd using the Euclidean algorithm
+    def gcd(a, b):
+        a,b = max(a,b), min(a,b)
+        if (b == 0):
+            return a
+        return gcd(b, a % b)
 
-    return [num for num in range(0, n) if gcd(num, n) == 1]
+    # Get list of values between [0, n) that have gcd(i, n) == 1
+    coprimes = []
+    for i in range(0, n):
+        if gcd(i, n) == 1:
+            coprimes.append(i)
+            
+    return coprimes
 
-def convertLetterToNumber(l):
-    return string.lowercase.find(l)
+
+# Solves the equations for a in the form
+#     x1 * a + b = r1 mod 26
+#     x2 * a + b = r2 mod 26
+# If a does not have an inverse, None is returned 
+def getA(x1, r1, x2, r2, m):
+    aSub = (x1 - x2) % m
+    rSub = (r1 - r2) % m
+    aInverse = getInverse(aSub, m)
+    
+    if (aInverse == None):
+        return None
+    
+    return (aInverse * rSub) % m
+
+
+# Solves the equation for b in the form
+#    x * a + b = r mod m
+def getB(x, a, r, m):
+    return (r - (a * x)) % m
+
+
+# Converts a list of numbers into values starting with
+# a = 0, b = 1, ...
+def convertLettersToNumbers(listOfLetters):
+    numbers = []
+    for letter in listOfLetters:
+        # number is the letter's position in the list of
+        # lowercase letters
+        numbers.append(string.lowercase.find(letter))
+    return numbers
+
 
 
 def enumeratePlaintexts(c, m):
@@ -44,51 +107,71 @@ def enumeratePlaintexts(c, m):
     return p
 
 
-def getA(a1, r1, a2, r2, m):
-    aSub = (a1 - a2) % m
-    rSub = (r1 - r2) % m
-    aInverse = getInverse(aSub, m)
-    if (aInverse == None):
-        return None
-    return (aInverse * rSub) % m
-
-def getB(c1, a1, r, m):
-    return (r - (a1 * c1)) % m
+# Checks if a plaintext string could be english.
+def couldBeEnglish(text):
+    count = 0
+    
+    # Looks through each common word.  If there is more than
+    # 1 occurrence of a common english word, then return True.
+    # Otherwise, the text is probably not English, so return False.
+    for commonWord in frequency.commonWords:
+        if (text.find(commonWord) >= 0):    # found the word
+            count += 1 
+            if (count >= 2):
+                return True
+    return False
+            
 
 
 
 if (__name__ == '__main__'):
-    word = open('word.txt').read().rstrip()
-    wordDigrams = frequency.getDigrams(word)
-    commonDigrams = frequency.digrams
     
-    s = set()
+    # Read in encrypted message from file
+    message = open('encryptedMessage.txt').read().rstrip()
+    
+    # Get list of most common digraphs for the message
+    messageDigrams = frequency.getDigraphs(word)
+    
+    # Get list of most common digraphs in English language
+    commonDigrams = frequency.commonDigraphs
+    
+    # Go through list of message digraphs and common digraphs sorted
+    # by frequency and convert each digraph to their corresponding numbers
     decryptedTexts = []
-    for i, wordDigram in enumerate(wordDigrams):
-        for j, digram in enumerate(commonDigrams):
-            wordNumbers = [convertLetterToNumber(x) for x in wordDigram]
-            digramNumbers = [convertLetterToNumber(x) for x in digram]
-            a = getA(digramNumbers[0], wordNumbers[0], 
-                     digramNumbers[1], wordNumbers[1], 26)
+    s = set()
+    for i, messageDigraph in enumerate(messageDigrams):
+        for j, commonDigraph in enumerate(commonDigrams):
+            messageNumbers = convertLettersToNumbers(messageDigraph)
+            commonDigraphNumbers = convertLettersToNumbers(commonDigraph)
             
-            if (a == None):
-                continue
-            if (a not in getCoprimes(26)):
+            # Get values for x1, r1, x2, r2 to solve for a
+            x1, r1 = commonDigraphNumbers[0], messageNumbers[0], 
+            x2, r2 = commonDigraphNumbers[1], messageNumbers[1]
+            
+            # m = 26 for this cipher
+            a = getA(x1, r1, x2, r2, 26)
+            
+            # Skip pairs of digraphs that cannot generate a valid
+            # value for a
+            if (a == None) or (a not in getCoprimes(26)):
                 continue
             
-            b = getB(digramNumbers[0], a, wordNumbers[0], 26)
+            # Get value for b
+            b = getB(x1, a, r1, 26)
+            
+            # Check if we've already tried the combination for a and b
+            # If not, try to decrypt
             if ((a,b) not in s):
-                decryptedTexts.append("{3}, ({0},{1}): {2}".format(a, b, decrypt(word, a, b), digram + " " + wordDigram))
                 s.add((a,b))
                 
-        
+                # Format the decrypted message to include a and b
+                decryptedMessage = decrypt(word, a, b)
+                text = "a:{0}, b:{1}, {2}".format(a, b, decryptedMessage)
                 
-    for plaintext in decryptedTexts:
-        count = 0
-        for commonWord in frequency.commonWords:
-            if (plaintext.find(commonWord) >= 0):
-                count += 1 
-                if (count > 2):
-                    print plaintext
-                    break
+                # If the word is probably english, print it out
+                if (couldBeEnglish(text)):
+                    print text + '\n'
                 
+                
+            
+    

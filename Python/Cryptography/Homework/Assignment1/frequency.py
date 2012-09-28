@@ -38,17 +38,18 @@ monograms = [x[1] for x in monograms]
 
 
 
-digrams = ['th', 'he', 'in', 'er', 're', 'on', 'an',
-           'en', 'at', 'es', 'ed', 'te', 'ti', 'or',
-           'st', 'ar', 'nd', 'to', 'nt', 'is', 'of',
-           'it', 'al', 'as', 'ha', 'ng', 'co', 'se',
-           'me', 'de']
+commonDigraphs = ['th', 'he', 'in', 'er', 're', 'on', 'an',
+                  'en', 'at', 'es', 'ed', 'te', 'ti', 'or',
+                  'st', 'ar', 'nd', 'to', 'nt', 'is', 'of',
+                  'it', 'al', 'as', 'ha', 'ng', 'co', 'se',
+                  'me', 'de']
 
 trigrams = ['the', 'and', 'tio', 'ati', 'for', 'tha',
             'ter', 'res', 'ere', 'con', 'ted', 'com']
 
 
-commonWords = ['the', 'and', 'that', 'have', 'for', 'not', 'with', 'you', 'this', 'but', 'his']
+commonWords = ['the', 'and', 'that', 'have', 'for', 'not', 
+               'with', 'you', 'this', 'but', 'his']
 
 
 
@@ -64,7 +65,7 @@ def getMonograms(s):
     monogramDict = collections.Counter(s)
     return convertDictToSortedList(monogramDict)
     
-def getDigrams(s):
+def getDigraphs(s):
     '''Get digrams ordered by frequency'''
     digramDict = collections.Counter(re.findall(r'(?=(..))', s))
     return convertDictToSortedList(digramDict)

@@ -10,6 +10,33 @@ def gcd(a, b):
     if (b == 0): return a
     return gcd(b, a % b)
 
+# Decrypt a shift cipher given the shift amount
+def decrypt(ciphertext, shift):
+    # Get list of all uppercase letters in string library
+    letters = string.uppercase;
+    plaintext = []
+    for c in ciphertext:
+        # convert letter to number and decrypt
+        encryptedNum = letters.find(c)               
+        decryptedNum = (encryptedNum - shift) % 26
+        plaintext.append(letters[decryptedNum])   
+    return ''.join(plaintext) 
+
+
+# Return the transposed decrypted columns to decrypt the Vigenere cipher 
+def decryptVigenere(ciphertextColumns):
+    # Generate list of tuples consisting of (ciphertext column, shift amount)
+    shifts = [1, 3, 5, 7, 9]
+    colsAndShifts = zip(ciphertextColumns, shifts)
+    
+    # Decrypt each column using each shift
+    # Return the transposed columns to get readable plaintext
+    decryptedCols = [decrypt(col, shift) for col, shift in colsAndShifts]
+    return ''.join(transpose(decryptedCols))
+    
+    
+
+
 
 def kasiski(cipherText, rangeN = range(3,6)):
     distances = []
@@ -39,17 +66,34 @@ def kasiski(cipherText, rangeN = range(3,6)):
     return max(gcdCounts.iteritems(), key=lambda x: x[1])[0]
 
 
-def getColumns(ciphertext, w):
-    columns = []
-    for i in range(w):
-        # For each i, get the string of letters containing ciphertext[i],
-        # ciphertext[i+w], ciphertext[i+2w]... to generate list of column strings
-        columns.append(''.join([ciphertext[j] for j in range(i, len(ciphertext), w)]))
-    return columns
+# Gets the trigraphs that appear more than one time in the ciphertext
+def getTrigraphs(ciphertext):
+    # Find all 3 letter trigraphs
+    trigraphs = collections.Counter(re.findall(r'(?=(...))', ciphertext))
+    
+    # Returns the trigraphs that appeared more than once in the ciphertext
+    return [trigraph for trigraph, count in trigraphs.items() if count > 1]
     
 
+
+# Returns a list of the starting index of each trigraph in the ciphertext
+def getTrigraphIndexes(ciphertext, trigraph):
+    return [match.start() for match in re.finditer(trigraph, ciphertext)]
+
+
+# Given w, the length of the key, return w columns of text
+def getColumns(ciphertext, w):
+    # Separate the ciphertext into sections of length 5 and store in a list
+    numRows = len(ciphertext) / w
+    rows = [ciphertext[i*w : i*w + w] for i in range(numRows)]
+    
+    # Transpose the rows to get the columns
+    return transpose(rows)
+    
+    
+# Return the letter frequencies for each column
 def getLetterFrequencies(columns):
-    # For each column, get map of (letter, frequency) 
+    # For each column, return a map of (letter : frequency) 
     return [collections.Counter(column) for column in columns]
         
         
@@ -66,36 +110,38 @@ def indexOfCoincidence(letterFrequencyMap, alphabet, n):
     return total
 
       
-def decrypt(word, shift):
-    letters = []
-    for letter in word:
-        letters.append(string.uppercase[(d[letter] - shift) % 26])
-    return ''.join(letters)
-      
 
 def shift(str):
     a = str[0]
     b = str[1]
     return (d[b] - d[a]) % 26
 
+# Transposes the rows and columns of a matrix
 def transpose(matrix):
-    x = []
-    for i in range(len(matrix[0])):
-        x.append(''.join([row[i] for row in matrix]))    
-    return x
+    # Get a list of the ith letter of each row and add it to the column list
+    columns, rowLength = [], len(matrix[0])
+    for i in range(rowLength):
+        columns.append(''.join([row[i] for row in matrix]))    
+    return columns
         
 
 if (__name__ == '__main__'):
-    ciphertext = open('ciphertext.txt').read().rstrip()
-    w = kasiski(ciphertext)
-    columns = getColumns(ciphertext, w)
-    shifts = [1,3,5,7,9]
     
-    plains = []
-    for column,shift in zip(columns, shifts):
-        plains.append(decrypt(column, shift))
+    # Read ciphertext from file and print repeating trigraphs
+    ciphertext = open('ciphertext.txt').read().rstrip()
+    
+    columns = getColumns(ciphertext, 5)
+    print decryptVigenere(columns)
+    
+    
+    #columns = getColumns(ciphertext, w)
+    #shifts = [1,3,5,7,9]
+    
+    #plains = []
+    #for column,shift in zip(columns, shifts):
+     #   plains.append(decrypt(column, shift))
         
-    print ''.join(transpose(plains))
+    #print ''.join(transpose(plains))
         
 
 
