@@ -1,0 +1,25 @@
+
+Pre-req:
+- Do gnetcat homework
+- Read chapter 8
+
+1. Start now
+2. Begin with creating jobs list
+3. Start working on built in commands (fg, bg, kill, stop)
+4. Read up on signals, will discuss in class
+    - need to do work outside of lecture
+    - read up on gnu's job controll and signal handling
+5. Get familiar with provided utilities and data structures
+    - unfamiliar linked list
+    - read through notes in header and source file
+    - useful structs
+        - esh_command_line
+        - esh_command
+        - esh_pipeline
+
+  !!! These are extremely important
+
+6. SVN tutorials, shouldn't need to search far to find them
+    - commit often 
+
+

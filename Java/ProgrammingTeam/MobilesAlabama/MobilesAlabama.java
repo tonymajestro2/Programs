@@ -1,3 +1,8 @@
+/**
+ * Passes ICPC online judge
+ */
+
+
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;

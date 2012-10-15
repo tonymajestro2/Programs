@@ -27,12 +27,12 @@ public class Quzzle
 		while (bfs.size() > 0) {
 			State s = bfs.poll();
 			int n = dist.get(s);
-			visited.add(s);
+		    visited.add(s);		
 			
 			for (State child : s.getChildren()) {
 				if (visited.contains(child))
 					continue;
-				
+
 				if (!pred.containsKey(child))
 					pred.put(child, s);
 				
@@ -43,6 +43,7 @@ public class Quzzle
 				
 				if (child.isFinal()) {
 					printSolution(child, pred);
+                    System.out.println(dist.get(child));
 					return;
 				}
 			}

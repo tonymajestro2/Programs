@@ -52,19 +52,19 @@ public class Marbles
 			int n = dist.get(s);
 			visited.add(s);
 			
-			for (State child : s.getChildren()) {
+            if (s.isFinal()) {
+				outputState(s, pred);
+			    return;
+		    }
+			
+            for (State child : s.getChildren()) {
 				if (visited.contains(child))
 					continue;
 				
 				if (!pred.containsKey(child))
 					pred.put(child, s);
 				
-				if (child.isFinal()) {
-					outputState(child, pred);
-					return;
-				}
-				
-				if (!dist.containsKey(child)) {
+                if (!dist.containsKey(child)) {
 					dist.put(child, n+1);
 					bfs.offer(child);
 				}
