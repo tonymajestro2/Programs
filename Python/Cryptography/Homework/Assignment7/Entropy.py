@@ -1,21 +1,18 @@
 import collections
 import math
 
-def log2(num):
-    return math.log(num) / math.log(2)
-
-frequencies = []
-for line in open('in.txt'):
-    frequencies.extend([int(x) for x in line.split()])
+# Get guess counts
+guessCounts = []
+for line in open('frequencies.txt'):
+    guessCounts.extend([int(x) for x in line.split()])
    
-total = 0 
-for num, frequency in collections.Counter(frequencies).items():
-    px = float(frequency) / len(frequencies)
-    total = total - (log2(px) * px)
-    
-f = collections.Counter(frequencies).items()
-for k in f:
-    print k
+# Get guess frequencies
+guessFrequencies = collections.Counter(guessCounts)
 
-    
-    
+# Calculate entropy for guesses based on P(x) = frequency / entropy guesses
+entropy = 0
+for num, frequency in guessFrequencies.iteritems():
+    px = float(frequency) / len(guessCounts)
+    entropy = entropy + (math.log(px, 2) * px)
+
+print entropy * -1
