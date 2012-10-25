@@ -37,11 +37,12 @@ public class RollerCoaster
 	
 	static void solve(int maxFun, int k, int maxDizziness, int[] funLevels, int[] dizLevels)
 	{
-		int[][] fun = new int[maxFun+1][funLevels.length+1];
-		int[][] diz = new int[maxFun+1][funLevels.length+1];
+		int n = funLevels.length;
+		int[][] fun = new int[maxFun+1][n+1];
+		int[][] diz = new int[maxFun+1][n+1];
 			
-		for (int f = 0; f <= maxFun; f++) {
-			for (int i = 0; i < funLevels.length; i++) {
+		for (int f = 1; f <= maxFun; f++) {
+			for (int i = 0; i < n; i++) {
 				int currFun = funLevels[i];
 				int currDiz = dizLevels[i];
 				fun[f][i+1] = fun[f][i];
@@ -49,20 +50,21 @@ public class RollerCoaster
 				if (currFun <= f) {
 					int funTaken = fun[f - currFun][i] + currFun; 
 					int dizTaken = diz[f - currFun][i] + currDiz;
-					if (dizTaken <= maxDizziness && 
-							compareSection(funTaken, dizTaken, fun[f][i+1], diz[f][i+1]) > 0) {
-						fun[f][i+1] = funTaken;
-						diz[f][i+1] = dizTaken;
-					}
+					if (dizTaken <= maxDizziness) {
+						if (funTaken > fun[f][i+1] || 
+							(funTaken == fun[f][i+1] && dizTaken < diz[f][i+1])) {
+							fun[f][i+1] = funTaken;
+							diz[f][i+1] = dizTaken;
+						}
+					}		
 				}
 			}
-			//printArray(best);
 		}
 		
 		int max = 0;
 		for (int i = 0; i <= maxFun; i++) {
 			max = Math.max(max, fun[i][funLevels.length]);
-		}
+	    }	
 		
 		System.out.println(max);
 	}
