@@ -3,7 +3,9 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -17,7 +19,7 @@ public class ShortestPath1
 			int numVertices = in.nextInt();
 			int numEdges = in.nextInt();
 			
-			Graph g = new Graph();
+			Graph g = new Graph(numVertices);
 			int[] dist = new int[numVertices];
 			int[] pred = new int[numVertices];
 			boolean[] visited = new boolean[numVertices];
@@ -25,14 +27,15 @@ public class ShortestPath1
 			for (int i = 0; i < numVertices; i++) {
 				dist[i] = Integer.MAX_VALUE;
 				pred[i] = Integer.MAX_VALUE;
-				g.adjacencyList.add(new ArrayList<Edge>());
+				g.edges.add(new HashMap<Integer, Edge>());
 			}
 			
 			for (int i = 0; i < numEdges; i++) {
 				int v = in.nextInt();
 				int w = in.nextInt();
 				int weight = in.nextInt();
-				g.addEdge(v, new Edge(v, w, weight));
+				g.addEdge(new Edge(v, w, weight));
+				g.addEdge(new Edge(w, v, weight));
 			}
 			
 			dist[0] = 0;
@@ -56,11 +59,11 @@ public class ShortestPath1
 			visited[v] = true;
 			
 			int d = dist[v];
-			for (Edge e : g.adjacencyList.get(v)) {
+			for (Edge e : g.edges.get(v).values()) {
 				int newDist = d + e.weight;
-				if (newDist < dist[e.w]) {
-					dist[e.w] = newDist;
-					pred[e.w] = v; 
+				if (newDist < dist[e.v]) {
+					dist[e.v] = newDist;
+					pred[e.v] = v; 
 				}
 			}
 		}
@@ -98,25 +101,33 @@ public class ShortestPath1
 
 	static class Graph
 	{
-		List<List<Edge>> adjacencyList;
+		int size;
+		int[] vertices;	
+		List<Map<Integer, Edge>> edges;
 		
-		Graph() { 
-			this.adjacencyList = new ArrayList<List<Edge>>(); 
+		Graph(int n) { 
+			this.vertices = new int[n];
+			this.edges = new ArrayList<Map<Integer, Edge>>();
+			this.size = n;
 		}
 		
-		void addEdge(int v, Edge e) {
-			this.adjacencyList.get(v).add(e);
+		Edge getEdge(int u, int v) {
+			return edges.get(u).get(v);
+		}
+		
+		void addEdge(Edge e) {
+			this.edges.get(e.u).put(e.v, e);
 		}
 	}
 	
+	
 	static class Edge
 	{
-		int v;
-		int w;
+		int u; int v;
 		int weight;
 		
-		Edge(int v, int w, int weight) {
-			this.v = v; this.w = w; this.weight = weight;
+		Edge(int u, int v, int weight) {
+			this.u = u; this.v = v; this.weight = weight;
 		}
 	}
 }
