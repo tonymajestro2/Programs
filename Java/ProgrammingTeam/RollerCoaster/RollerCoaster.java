@@ -1,12 +1,11 @@
-import java.util.Arrays;
-import java.util.Scanner;
-
 /**
  * Tony Majestro (tmajest)
  * 
- * 2010 F: Roller Coaster
- * http://midatl.radford.edu/docs/pastProblems/10contest/MidAtlantic2010.pdf
+ * Runs all input sets in 5 seconds on r-login
+ * Time-out on ICPC online judge
  */
+
+import java.util.Scanner;
 
 public class RollerCoaster 
 {
@@ -45,11 +44,14 @@ public class RollerCoaster
 			for (int i = 0; i < n; i++) {
 				int currFun = funLevels[i];
 				int currDiz = dizLevels[i];
+				
 				fun[f][i+1] = fun[f][i];
 				diz[f][i+1] = (diz[f][i] - k <= 0) ? 0 : diz[f][i] - k; 
+				
 				if (currFun <= f) {
 					int funTaken = fun[f - currFun][i] + currFun; 
 					int dizTaken = diz[f - currFun][i] + currDiz;
+					
 					if (dizTaken <= maxDizziness) {
 						if (funTaken > fun[f][i+1] || 
 							(funTaken == fun[f][i+1] && dizTaken < diz[f][i+1])) {

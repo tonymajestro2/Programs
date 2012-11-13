@@ -1,5 +1,11 @@
 
-long testFunc(int x) 
+#include <stdlib.h>
+#include <stdio.h>
+
+int main()
 {
-   return 22 * x;
+    int *ptr = malloc(6 * sizeof(int));
+    ptr = ptr - 2;
+    printf("%d\n", *ptr ^ 1);
+    printf("%d\n", *ptr & 1);
 }
