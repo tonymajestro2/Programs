@@ -1,18 +1,22 @@
 
 def hamming74(code):
-    # isolate bits and count number of 1 bits mod 2 to get
-    # values for alpha, beta, and gamma
-    alpha = '{0:b}'.format(code & 0b0001111).count('1') % 2
-    beta  = '{0:b}'.format(code & 0b0110011).count('1') % 2 
-    gamma = '{0:b}'.format(code & 0b1010101).count('1') % 2
+    # isolate bits  for alpha, beta, and gamma, convert to binary string,
+    # and count number of 1 bits mod 2 to get parity
+    alpha = '{0:b}'.format(code & 0b0001111).count('1') % 2  # bits 4, 5, 6, 7
+    beta  = '{0:b}'.format(code & 0b0110011).count('1') % 2  # bits 2, 3, 6, 7
+    gamma = '{0:b}'.format(code & 0b1010101).count('1') % 2  # bits 1, 3, 5, 7
     
     # concatentate alpha, beta, and gamma to get error bit
-    error_bit = int('{0}{1}{2}'.format(alpha, beta, gamma), 2)
-    return error_bit
+    error_position = int('{0}{1}{2}'.format(alpha, beta, gamma), 2)
+    return error_position
 
-def correctMessage(code, error):
-    if (error > 0):
-        return code ^ 1 << (error - 1)
+def correctMessage(code, error_position):
+    # If error_position bit is 0, no correction needs to be made
+    if (error_position == 0):
+        return code
+    # If error_position bit is non-zero, flip the error_position bit
+    else:
+        return code ^ 1 << (error_position - 1)
 
 
 
