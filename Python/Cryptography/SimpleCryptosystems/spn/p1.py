@@ -1,38 +1,4 @@
 
-def encrypt(pt, key, sboxMap):
-    k1 = key & 0x0000ffff
-    #printBinary('k', k1)
-    
-    u = pt ^ k1
-    #printBinary('u', u)
-    
-    for i in range(3):
-        #print '\nRound {0}:'.format(i + 1)
-        v = sbox(u, sboxMap)
-        #printBinary('v', v)
-        
-        w = perm(v)
-        #printBinary('w', w)
-        
-        key >>= 4
-        ki = key & 0x0000ffff
-        #printBinary('k', ki)
-        
-        u = w ^ ki
-        #printBinary('u', u)
-       
-    #print '\nRound 4:' 
-    v = sbox(u, sboxMap)
-    #printBinary('v', v)
-    
-    key >>= 4
-    k5 = key & 0x0000ffff
-    #printBinary('k', k5)
-    
-    #printBinary('u', v ^ k5, True)
-    return v ^ k5
-
-
 # Decrypt the cipher text using the given key and
 # sbox mapping
 def decrypt(ct, key, sboxMap):
@@ -129,17 +95,11 @@ def printBinary(name, value):
     print '{0}: {1}'.format(name, ' '.join(chunks))
 
 
-def flipHex(value):
-    return int('{0:04x}'.format(value)[::-1], 16)
-
-
 
 key = 0x3A94D63F
 ct = 0xCD48
-
-sboxMap = {0:14, 1:4, 2:13, 3:1, 4:2, 5:15, 6:11, 7:8, 8:3, 9:10,
-           10:6, 11:12, 12:5, 13:9, 14:0, 15:7}
-    
-sboxMap2 = dict([(v, k) for k,v in sboxMap.iteritems()])
+sboxMap = {14:0, 4:1, 13:2, 1:3, 2:4, 15:5, 11:6, 8:7, 3:8, 10:9,
+            6:10, 12:11, 5:12, 9:13, 0:14, 7:15}
    
-decrypt(ct, key, sboxMap2)
+# Decrypt the ciphertext using the key and sbox mapping
+decrypt(ct, key, sboxMap)
