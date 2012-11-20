@@ -1,0 +1,8 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+  <title>Artists</title>  <script type="text/javascript">    // <![CDATA[    var properties = { width: 300,                       height: 400,                       scrollbars: 'yes',                       resizable: 'yes' };    function popup(){      var link = this.getAttribute( 'href' );      var prop_str = '';      for( prop in properties ){        prop_str = prop_str + prop + '=' + properties[prop] + ',';      }      prop_str = prop_str.substr( 0, prop_str.length - 1 );      var newWindow = window.open( link, '_blank', prop_str );      if( newWindow ){        if( newWindow.focus ) newWindow.focus();        return false;      }      return true;    }    function setupPopups(){      var links = document.getElementsByTagName( 'a' );      for( var i=0; i<links.length; i++ ){        if( links[i].getAttribute( 'rel' ) &&            links[i].getAttribute( 'rel' ) == 'popup' ) links[i].onclick = popup;      }    }    window.onload = function(){       setupPopups();    }    // ]]>  </script></head><body><!-- Add rel="popup" to any link you'd like to open in the sized window -->
+
+<a href="document.html" rel="popup">OPEN IN NEW SMALL WINDOW</a></body></html>
